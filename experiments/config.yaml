@@ -1,0 +1,51 @@
+opengl:
+  debug_mode: True
+
+beamer:
+  sequence: GREY3X
+
+motive:
+  ip: 127.0.0.1
+  dataport: 1511
+  commport: 1510
+  arena_body: Arena
+  rat_body: Rat
+
+experiments:
+  - Visual Cliff
+  - Object Exploration
+  - Wall Exploration
+
+rats:
+  - Test
+  - VR1
+  - VR2
+
+
+viscliff:
+  cliffdepth: 1.0
+  shallowdepth: 0.0
+  objfile: ./assets/viscliff.obj
+  conditions:
+    - Real
+    - VR
+    - Static
+  cliffsides:
+    - Left
+    - Right
+
+objexp:
+  conditions:
+    - Real
+    - VR
+  objsides:
+    - Left
+    - Right
+
+wallexp:
+  wallpositions:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
