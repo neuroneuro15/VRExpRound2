@@ -43,7 +43,7 @@ monkey.uniforms['diffuse'] = 1., 1., 1.
 scene = rc.Scene(meshes=[monkey], bgColor=(0., 0., 0.))
 
 
-quad_texture = rc.Texture(width=1929, height=1080)
+quad_texture = rc.Texture(width=1920, height=1080)
 fbo = rc.FBO(texture=quad_texture)
 quad = rc.gen_fullscreen_quad('SceneQuad')
 quad.texture = fbo.texture

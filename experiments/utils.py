@@ -8,17 +8,21 @@ RenderCollection = namedtuple("RenderCollection", "shader fbo quad")
 
 # Load up Meshes and Scene
 def load_projected_scene(arena_file, projector_file, arena_name='Arena'):
-    arena = rc.WavefrontReader(arena_vr).get_mesh('Arena')
+    arena = rc.WavefrontReader(arena_file).get_mesh(arena_name)
+    arena.uniforms['diffuse'] = .8, .8, .8
     projector = rc.Camera.from_pickle(projector_file)
-    scene = rc.Scene(meshes=['Arena'])
+    print(projector.projection.fov_y)
+    projector.projection.aspect = 1.77
+    print(projector.projection.aspect)
+    scene = rc.Scene(meshes=[arena], camera=projector, bgColor=(.6, 0, 0))
     scene.light.position.xyz = projector.position.xyz
-    return scene
+    return scene, arena
 
 
-def setup_window(sceneID=1, fullscreen=True):
+def setup_window(screen=1, fullscreen=True):
     """Return a pyglet Window on the screen desired."""
     display = pyglet.window.get_platform().get_default_display()
-    screen = display.get_screens()[sceneID]
+    screen = display.get_screens()[screen]
     window = pyglet.window.Window(fullscreen=fullscreen, screen=screen, vsync=False)
     return window
 

@@ -19,7 +19,7 @@ beamer.setSleepMode(False)  # Turns on beamer (just in case)
 #beamer.setCeilingMountMode(True)
 #beamer.setRearProjectionMode(True)
 #beamer.setLedIntensity('100.0')
-beamer.setDlpSequencerProgram(cfg['beamer']['sequence'])
+beamer.setDlpSequencerProgram('RGB')#cfg['beamer']['sequence'])
 
 # Confirm that Motive is broadcasting network data
 import socket
