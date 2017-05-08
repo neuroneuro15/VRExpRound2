@@ -5,6 +5,7 @@ pyglet.options['debug_gl_trace'] = False
 
 import ratcave as rc
 from natnetclient import NatClient
+import utils
 
 ARENA_FILENAME = './assets/arena3uv.obj'
 PROJECTOR_FILENAME = './calibration/p2.pickle'
@@ -12,18 +13,11 @@ SCREEN = 1
 FULLSCREEN = True
 
 
-display = pyglet.window.get_platform().get_default_display()
-screen = display.get_screens()[SCREEN]
-window = pyglet.window.Window(fullscreen=FULLSCREEN, screen=screen, vsync=False)
+window = utils.setup_window(screen=SCREEN, fullscreen=FULLSCREEN)
 
 motive = NatClient(read_rate=2000)
 
-arena = rc.WavefrontReader(ARENA_FILENAME).get_mesh('Arena')
-arena.uniforms['diffuse'] = 1., 1, 1
-arena_rb = motive.rigid_bodies['Arena']
-print('Original Arena Position: ', arena.position)
-arena.position.xyz = arena_rb.position
-arena.rotation.xyz = arena_rb.rotation
+arena, arena_rb = utils.get_arena_with_rigidbody(arena_objfilename=ARENA_FILENAME, motive_client=motive, flat_shading=False)
 
 
 beamer = rc.Camera.from_pickle(PROJECTOR_FILENAME)

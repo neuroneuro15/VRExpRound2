@@ -28,15 +28,7 @@ cube_fbo = utils.setup_cube_fbo()
 
 motive = NatClient(read_rate=2000)
 
-arena = rc.WavefrontReader(ARENA_FILENAME).get_mesh('Arena')
-arena.uniforms['diffuse'] = 1., 1, 1
-arena.rotation = arena.rotation.to_quaternion()
-arena_rb = motive.rigid_bodies['Arena']
-
-print('Original Arena Position: ', arena.position)
-arena.position.xyz = arena_rb.position
-arena.rotation.xyz = arena_rb.rotation
-arena.uniforms['flat_shading'] = False
+arena, arena_rb = utils.get_arena_with_rigidbody(arena_objfilename=ARENA_FILENAME, motive_client=motive, flat_shading=False)
 # arena.texture = cube_fbo.texture
 
 def get_sphere(position, scale=.05):

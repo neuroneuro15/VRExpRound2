@@ -33,15 +33,18 @@ def setup_cube_fbo(width=4096):
 
 
 def get_arena_with_rigidbody(arena_objfilename, motive_client, flat_shading=False):
+    """Return (arena, arena_rb) from filename and motive client."""
     arena = rc.WavefrontReader(arena_objfilename).get_mesh('Arena')
     arena.uniforms['diffuse'] = 1., 1, 1
     arena.rotation = arena.rotation.to_quaternion()
-    arena_rb = motive.rigid_bodies['Arena']
 
-    print('Original Arena Position: ', arena.position)
+    arena_rb = motive_client.rigid_bodies['Arena']
     arena.position.xyz = arena_rb.position
     arena.rotation.xyz = arena_rb.rotation
-    arena.uniforms['flat_shading'] = False
+    arena.uniforms['flat_shading'] = flat_shading
+
+    return arena, arena_rb
+
 
 def setup_deferred_rendering():
     """Return (Shader, FBO, QuadMesh) for deferred rendering."""
