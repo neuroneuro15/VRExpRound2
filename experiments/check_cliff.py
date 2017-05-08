@@ -66,13 +66,5 @@ def on_draw():
     fps_display.draw()
 
 
-def update(dt):
-    arena.position.xyz = arena_rb.position
-    arena.rotation.xyz = arena_rb.rotation
-    cube_camera.position.xyz = rat_rb.position
-    # cube_camera.rotation.xyz = rat_rb.rotation
-    print(cube_camera.orientation)
-    cube_camera.uniforms['playerPos'] = cube_camera.position.xyz
-pyglet.clock.schedule(update)
-
+pyglet.clock.schedule(utils.update, [arena], cube_camera, motive)
 pyglet.app.run()

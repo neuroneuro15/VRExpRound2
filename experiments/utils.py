@@ -28,7 +28,7 @@ def get_arena_with_rigidbody(arena_objfilename, motive_client, flat_shading=Fals
 
     arena_rb = motive_client.rigid_bodies['Arena']
     arena.position.xyz = arena_rb.position
-    arena.rotation.xyz = arena_rb.rotation
+    arena.rotation.wxyz = arena_rb.quaternion
     arena.uniforms['flat_shading'] = flat_shading
 
     return arena, arena_rb
@@ -55,9 +55,19 @@ def load_projected_scene(arena_file, projector_file, motive_client):
 
 def get_cubecamera(z_near=.004, z_far=1.5):
     """Returns a ratcave.Camera instance with fov_y=90 and aspect=1. Useful for dynamic cubemapping."""
-    return rc.Camera(projection=rc.PerspectiveProjection(fov_y=90., aspect=1., z_near=z_near, z_far=z_far))
+    camera = rc.Camera(projection=rc.PerspectiveProjection(fov_y=90., aspect=1., z_near=z_near, z_far=z_far))
+    camera.rotation = camera.rotation.to_quaternion()
+    return camera
 
 
+def update(dt, arenas, cube_camera, motive_client):
+    for arena in arenas:
+        arena.position.xyz = motive_client.rigid_bodies['Arena'].position
+        arena.rotation.xyzw = motive_client.rigid_bodies['Arena'].quaternion
+
+    cube_camera.position.xyz = motive_client.rigid_bodies['Rat'].position
+    cube_camera.rotation.xyzw = motive_client.rigid_bodies['Rat'].quaternion
+    cube_camera.uniforms['playerPos'] = cube_camera.position.xyz
 
 def setup_deferred_rendering():
     """Return (Shader, FBO, QuadMesh) for deferred rendering."""

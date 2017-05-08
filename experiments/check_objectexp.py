@@ -29,7 +29,7 @@ cube_fbo = utils.setup_cube_fbo()
 motive = NatClient(read_rate=2000)
 
 scene, arena, arena_rb = utils.load_projected_scene(arena_file=ARENA_FILENAME, projector_file=PROJECTOR_FILENAME, motive_client=motive)
-# arena.texture = cube_fbo.texture
+arena.texture = cube_fbo.texture
 
 # Add some black circles to the object positions, to reduce glare.
 def get_sphere(position, scale=.05):
@@ -67,10 +67,10 @@ def load_vr_obj_mesh(obj_filename, mesh_name, arena, position, scale=VR_OBJECT_S
 mesh_local_pos = POSITION_L if 'l' in VR_OBJECT_SIDE.lower() else POSITION_R
 
 if VR_OBJECT_VISIBLE:
-    vr_meshes = load_vr_obj_mesh(obj_filename=VR_OBJECTS_FILENAME,
+    vr_meshes = [load_vr_obj_mesh(obj_filename=VR_OBJECTS_FILENAME,
                                  arena=arena,
                                  position=mesh_local_pos,
-                                 mesh_name=VR_OBJECT_NAME)
+                                 mesh_name=VR_OBJECT_NAME)]
 else:
     vr_meshes = []
 
@@ -96,21 +96,12 @@ rat_rb = motive.rigid_bodies['Rat']
 @window.event
 def on_draw():
     with shader:
-        # with cube_fbo as fbo:
-        #     vr_scene.draw360_to_texture(fbo.texture)
+        with cube_fbo as fbo:
+            vr_scene.draw360_to_texture(fbo.texture)
         scene.draw()
         # vr_scene.draw()
     fps_display.draw()
 
 
-def update(dt):
-    arena.position.xyz = arena_rb.position
-    arena.rotation.xyzw = arena_rb.quaternion
-    vr_arena.position.xyz = arena_rb.position
-    vr_arena.rotation.xyzw = arena_rb.quaternion
-    cube_camera.position.xyz = rat_rb.position
-    cube_camera.rotation.xyzw = rat_rb.quaternion
-    cube_camera.uniforms['playerPos'] = cube_camera.position.xyz
-pyglet.clock.schedule(update)
-
+pyglet.clock.schedule(utils.update, [arena, vr_arena], cube_camera, motive)
 pyglet.app.run()

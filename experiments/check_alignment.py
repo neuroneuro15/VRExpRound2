@@ -37,7 +37,7 @@ def on_draw():
 
 def update(dt):
     arena.position.xyz = arena_rb.position
-    arena.rotation.xyz = arena_rb.rotation
+    arena.rotation.xyzw = arena_rb.quaternion
 pyglet.clock.schedule(update)
 
 print('Projector: ', beamer.position, beamer.orientation)
