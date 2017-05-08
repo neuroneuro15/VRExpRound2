@@ -59,10 +59,8 @@ else:
 
 
 vr_arena = rc.WavefrontReader(ARENA_FILENAME).get_mesh('Arena')
-vr_arena.rotation = vr_arena.rotation.to_quaternion()
+vr_arena.parent = arena
 vr_arena.uniforms['diffuse'] = 1., 1, 1
-vr_arena.position.xyz = arena_rb.position
-vr_arena.rotation.xyz = arena_rb.rotation
 vr_arena.uniforms['flat_shading'] = False
 vr_arena.texture = rc.Texture.from_image('./assets/uvgrid.png')
 vr_meshes.append(vr_arena)
@@ -85,5 +83,5 @@ def on_draw():
     fps_display.draw()
 
 
-pyglet.clock.schedule(utils.update, [arena, vr_arena], cube_camera, motive)
+pyglet.clock.schedule(utils.update, arena, cube_camera, motive)
 pyglet.app.run()

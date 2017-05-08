@@ -60,10 +60,9 @@ def get_cubecamera(z_near=.004, z_far=1.5):
     return camera
 
 
-def update(dt, arenas, cube_camera, motive_client):
-    for arena in arenas:
-        arena.position.xyz = motive_client.rigid_bodies['Arena'].position
-        arena.rotation.xyzw = motive_client.rigid_bodies['Arena'].quaternion
+def update(dt, arena, cube_camera, motive_client):
+    arena.position.xyz = motive_client.rigid_bodies['Arena'].position
+    arena.rotation.xyzw = motive_client.rigid_bodies['Arena'].quaternion
 
     cube_camera.position.xyz = motive_client.rigid_bodies['Rat'].position
     cube_camera.rotation.xyzw = motive_client.rigid_bodies['Rat'].quaternion

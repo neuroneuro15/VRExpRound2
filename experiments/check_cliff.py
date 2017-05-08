@@ -44,7 +44,6 @@ vr_arena.texture = rc.Texture.from_image('./assets/uvgrid.png')
 
 vr_scene = rc.Scene(meshes=[vr_arena], bgColor=(1., 1., 1.))
 vr_scene.light.position.xyz = scene.light.position.xyz
-# vr_scene.light.position.xyz = 0, 0, 0
 
 vr_scene.gl_states = vr_scene.gl_states[:-1]
 cube_camera = utils.get_cubecamera()
@@ -61,5 +60,5 @@ def on_draw():
     fps_display.draw()
 
 
-pyglet.clock.schedule(utils.update, [arena], cube_camera, motive)
+pyglet.clock.schedule(utils.update, arena, cube_camera, motive)
 pyglet.app.run()
