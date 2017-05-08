@@ -20,9 +20,9 @@ def setup_cube_fbo(width=4096):
     return rc.FBO(texture=rc.TextureCube(width=4096, height=4096))
 
 
-def get_arena_with_rigidbody(arena_objfilename, motive_client, flat_shading=False):
+def get_arena_with_rigidbody(arena_objfilename, motive_client, flat_shading=False, objname='Arena'):
     """Return (arena, arena_rb) from filename and motive client."""
-    arena = rc.WavefrontReader(arena_objfilename).get_mesh('Arena')
+    arena = rc.WavefrontReader(arena_objfilename).get_mesh(objname)
     arena.uniforms['diffuse'] = 1., 1, 1
     arena.rotation = arena.rotation.to_quaternion()
 
