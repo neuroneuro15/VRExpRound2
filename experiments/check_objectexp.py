@@ -13,8 +13,8 @@ PROJECTOR_FILENAME = './calibration/p2.pickle'
 SCREEN = 1
 FULLSCREEN = True
 CIRCLE_SCALE = .07
-POSITION_L = .225, -0.243, -.05
-POSITION_R = -.205, -.24, .015
+POSITION_L = .225, -0.143, -.05
+POSITION_R = -.205, -.14, .015
 VR_OBJECTS_FILENAME = './assets/Eng_AllObjs1.obj'  #rc.resources.obj_primitives
 VR_OBJECT_VISIBLE = True
 VR_OBJECT_NAMES = ['Monkey']
@@ -30,24 +30,6 @@ motive = NatClient(read_rate=2000)
 
 scene, arena, arena_rb = utils.load_projected_scene(arena_file=ARENA_FILENAME, projector_file=PROJECTOR_FILENAME, motive_client=motive)
 arena.texture = cube_fbo.texture
-
-# Add some black circles to the object positions, to reduce glare.
-def get_sphere(position, scale=.05):
-    primitive_reader = rc.WavefrontReader(rc.resources.obj_primitives)
-    vr_mesh = primitive_reader.get_mesh('Sphere', scale=scale)
-    vr_mesh.parent = arena
-    vr_mesh.position.xyz = position
-    vr_mesh.uniforms['diffuse'] = 0., 0., 0
-    vr_mesh.uniforms['specular'] = 0., 0., 0.
-    vr_mesh.uniforms['flat_shading'] = True
-    return vr_mesh
-
-circle1 = get_sphere(POSITION_L, scale=CIRCLE_SCALE)
-circle1.parent = arena
-circle2 = get_sphere(POSITION_R, scale=CIRCLE_SCALE + .0015)
-circle2.parent = arena
-scene.meshes.extend([circle1, circle2])
-
 
 shader = rc.Shader.from_file(*rc.resources.genShader)
 
