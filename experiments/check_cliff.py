@@ -13,7 +13,7 @@ CLIFF_FILENAME = './assets/viscliff3.obj'
 PROJECTOR_FILENAME = './calibration/p2.pickle'
 SCREEN = 1
 FULLSCREEN = True
-CLIFF_SIDE = 'L' # L or R
+CLIFF_SIDE = 'R' # L or R
 
 
 window = utils.setup_window(screen=SCREEN, fullscreen=FULLSCREEN)
@@ -35,19 +35,14 @@ shader = rc.Shader.from_file(*rc.resources.genShader)
 fps_display = pyglet.window.FPSDisplay(window)
 
 
-vr_meshes = []
-
 arena_name = 'virArena' if 'l' in CLIFF_SIDE.lower() else 'virArena2'
 vr_arena = rc.WavefrontReader(CLIFF_FILENAME).get_mesh(arena_name)
 vr_arena.uniforms['diffuse'] = 1., 1, 1
 vr_arena.parent = arena
-vr_arena.position.y -= 0
-# vr_arena.rotation.y = 180 if 'r' in CLIFF_SIDE.lower() else 0
 vr_arena.uniforms['flat_shading'] = False
 vr_arena.texture = rc.Texture.from_image('./assets/uvgrid.png')
-vr_meshes.append(vr_arena)
 
-vr_scene = rc.Scene(meshes=vr_meshes, bgColor=(1., 1., 1.))
+vr_scene = rc.Scene(meshes=[vr_arena], bgColor=(1., 1., 1.))
 vr_scene.light.position.xyz = scene.light.position.xyz
 # vr_scene.light.position.xyz = 0, 0, 0
 
