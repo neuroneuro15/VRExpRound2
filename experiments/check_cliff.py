@@ -52,12 +52,8 @@ vr_scene.light.position.xyz = scene.light.position.xyz
 # vr_scene.light.position.xyz = 0, 0, 0
 
 vr_scene.gl_states = vr_scene.gl_states[:-1]
-cube_camera = vr_scene.camera
-cube_camera.projection.fov_y = 90
-cube_camera.projection.aspect = 1.
-cube_camera.projection.z_near = .004
-cube_camera.projection.z_far = 1.5
-cube_camera.orientation0 = (0., -1, 0)
+cube_camera = utils.get_cubecamera()
+vr_scene.camera = cube_camera
 rat_rb = motive.rigid_bodies['Rat']
 
 

@@ -18,9 +18,9 @@ POSITION_R = -.205, -.24, .015
 VR_OBJECTS_FILENAME = './assets/Eng_AllObjs1.obj'  #rc.resources.obj_primitives
 VR_OBJECT_VISIBLE = True
 VR_OBJECT_NAMES = ['Monkey']
+VR_OBJECT_NAME = 'Monkey'
 VR_OBJECT_SCALE = .01
 VR_OBJECT_SIDE = 'R'
-VR_OBJECT_HEIGHT_OFFSET = .1
 
 
 window = utils.setup_window(screen=SCREEN, fullscreen=FULLSCREEN)
@@ -28,9 +28,10 @@ cube_fbo = utils.setup_cube_fbo()
 
 motive = NatClient(read_rate=2000)
 
-arena, arena_rb = utils.get_arena_with_rigidbody(arena_objfilename=ARENA_FILENAME, motive_client=motive, flat_shading=False)
+scene, arena, arena_rb = utils.load_projected_scene(arena_file=ARENA_FILENAME, projector_file=PROJECTOR_FILENAME, motive_client=motive)
 # arena.texture = cube_fbo.texture
 
+# Add some black circles to the object positions, to reduce glare.
 def get_sphere(position, scale=.05):
     primitive_reader = rc.WavefrontReader(rc.resources.obj_primitives)
     vr_mesh = primitive_reader.get_mesh('Sphere', scale=scale)
@@ -41,39 +42,38 @@ def get_sphere(position, scale=.05):
     vr_mesh.uniforms['flat_shading'] = True
     return vr_mesh
 
-
 circle1 = get_sphere(POSITION_L, scale=CIRCLE_SCALE)
-circle2 = get_sphere(POSITION_R, scale=CIRCLE_SCALE + .0015)
-
 circle1.parent = arena
+circle2 = get_sphere(POSITION_R, scale=CIRCLE_SCALE + .0015)
 circle2.parent = arena
+scene.meshes.extend([circle1, circle2])
 
-beamer = utils.get_beamer_camera(PROJECTOR_FILENAME)
-
-scene = rc.Scene(meshes=[arena, circle1, circle2], camera=beamer, bgColor=(1., 0, 0))
-# scene = rc.Scene(meshes=[arena], camera=beamer, bgColor=(1., 0, 0))
-scene.gl_states = scene.gl_states[:-1]
-scene.light.position.xyz = beamer.position.xyz
 
 shader = rc.Shader.from_file(*rc.resources.genShader)
 
 fps_display = pyglet.window.FPSDisplay(window)
 
 
-vr_meshes = []
+def load_vr_obj_mesh(obj_filename, mesh_name, arena, position, scale=VR_OBJECT_SCALE):
+    vr_obj_reader = rc.WavefrontReader(obj_filename)
+    mesh = vr_obj_reader.get_mesh(mesh_name, scale=scale, position=position)
+    mesh.parent = arena
+    mesh.uniforms['diffuse'] = (.5,) * 3
+    mesh.uniforms['specular'] = 0., 0., 0.
+    mesh.uniforms['flat_shading'] = False
+    mesh.uniforms['ambient'] = (1.,) * 3
+    return mesh
+
+mesh_local_pos = POSITION_L if 'l' in VR_OBJECT_SIDE.lower() else POSITION_R
 
 if VR_OBJECT_VISIBLE:
-    vr_obj_reader = rc.WavefrontReader(VR_OBJECTS_FILENAME)
-    vr_obj_mesh = vr_obj_reader.get_mesh(random.choice(VR_OBJECT_NAMES))
-    vr_obj_mesh.scale.x = VR_OBJECT_SCALE
-    vr_obj_mesh.parent = arena
-    vr_obj_mesh.position.xyz = POSITION_L if 'l' in VR_OBJECT_SIDE.lower() else POSITION_R
-    vr_obj_mesh.position.y += VR_OBJECT_HEIGHT_OFFSET
-    vr_obj_mesh.uniforms['diffuse'] = (.5,) * 3
-    vr_obj_mesh.uniforms['specular'] = 0., 0., 0.
-    vr_obj_mesh.uniforms['flat_shading'] = False
-    vr_obj_mesh.uniforms['ambient'] = (1.,) * 3
-    vr_meshes.append(vr_obj_mesh)
+    vr_meshes = load_vr_obj_mesh(obj_filename=VR_OBJECTS_FILENAME,
+                                 arena=arena,
+                                 position=mesh_local_pos,
+                                 mesh_name=VR_OBJECT_NAME)
+else:
+    vr_meshes = []
+
 
 
 vr_arena = rc.WavefrontReader(ARENA_FILENAME).get_mesh('Arena')
@@ -87,14 +87,9 @@ vr_meshes.append(vr_arena)
 
 vr_scene = rc.Scene(meshes=vr_meshes, bgColor=(1., 1., 1.))
 vr_scene.light.position.xyz = scene.light.position.xyz
-# vr_scene.light.position.xyz = 0, 0, 0
 vr_scene.gl_states = vr_scene.gl_states[:-1]
-cube_camera = vr_scene.camera
-cube_camera.rotation = cube_camera.rotation.to_quaternion()
-cube_camera.projection.fov_y = 90
-cube_camera.projection.aspect = 1.
-cube_camera.projection.z_near = .004
-cube_camera.projection.z_far = 1.5
+cube_camera = utils.get_cubecamera()
+vr_scene.camera = cube_camera
 rat_rb = motive.rigid_bodies['Rat']
 
 

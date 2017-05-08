@@ -18,15 +18,9 @@ window = utils.setup_window(screen=SCREEN, fullscreen=FULLSCREEN)
 cube_fbo = utils.setup_cube_fbo()
 
 motive = NatClient(read_rate=2000)
-
-arena, arena_rb = utils.get_arena_with_rigidbody(arena_objfilename=ARENA_FILENAME, motive_client=motive, flat_shading=False)
+scene, arena, arena_rb = utils.load_projected_scene(arena_file=ARENA_FILENAME, projector_file=PROJECTOR_FILENAME, motive_client=motive)
 arena.texture = cube_fbo.texture
 
-beamer = utils.get_beamer_camera(PROJECTOR_FILENAME)
-
-scene = rc.Scene(meshes=[arena], camera=beamer, bgColor=(1., 0, 0))
-scene.gl_states = scene.gl_states[:-1]
-scene.light.position.xyz = beamer.position.xyz
 
 shader = rc.Shader.from_file(*rc.resources.genShader)
 
@@ -59,13 +53,9 @@ vr_meshes.append(vr_arena)
 
 vr_scene = rc.Scene(meshes=vr_meshes, bgColor=(1., 1., 1.))
 vr_scene.light.position.xyz = scene.light.position.xyz
-# vr_scene.light.position.xyz = 0, 0, 0
 vr_scene.gl_states = vr_scene.gl_states[:-1]
-cube_camera = vr_scene.camera
-cube_camera.projection.fov_y = 90
-cube_camera.projection.aspect = 1.
-cube_camera.projection.z_near = .004
-cube_camera.projection.z_far = 1.5
+cube_camera = utils.get_cubecamera()
+vr_scene.camera = cube_camera
 rat_rb = motive.rigid_bodies['Rat']
 
 

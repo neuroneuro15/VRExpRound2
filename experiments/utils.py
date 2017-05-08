@@ -6,18 +6,6 @@ from pypixxlib import propixx
 
 RenderCollection = namedtuple("RenderCollection", "shader fbo quad")
 
-# Load up Meshes and Scene
-def load_projected_scene(arena_file, projector_file, arena_name='Arena'):
-    arena = rc.WavefrontReader(arena_file).get_mesh(arena_name)
-    arena.uniforms['diffuse'] = .8, .8, .8
-    projector = rc.Camera.from_pickle(projector_file)
-    print(projector.projection.fov_y)
-    projector.projection.aspect = 1.77
-    print(projector.projection.aspect)
-    scene = rc.Scene(meshes=[arena], camera=projector, bgColor=(.6, 0, 0))
-    scene.light.position.xyz = projector.position.xyz
-    return scene, arena
-
 
 def setup_window(screen=1, fullscreen=True):
     """Return a pyglet Window on the screen desired."""
@@ -52,6 +40,23 @@ def get_beamer_camera(fname, aspect=1.7778, fov_y=41.5):
     beamer.projection.aspect = aspect
     beamer.projection.fov_y = fov_y
     return beamer
+
+
+# Load up Meshes and Scene
+def load_projected_scene(arena_file, projector_file, motive_client):
+    """Scene-building convenience function. Returns (scene, arena, arena_rb) from filenames and motive."""
+    arena, arena_rb = get_arena_with_rigidbody(arena_objfilename=arena_file, motive_client=motive_client)
+    beamer = get_beamer_camera(fname=projector_file)
+    scene = rc.Scene(meshes=[arena], camera=beamer, bgColor=(.6, 0, 0))
+    scene.gl_states = scene.gl_states[:-1]
+    scene.light.position.xyz = beamer.position.xyz
+    return scene, arena, arena_rb
+
+
+def get_cubecamera(z_near=.004, z_far=1.5):
+    """Returns a ratcave.Camera instance with fov_y=90 and aspect=1. Useful for dynamic cubemapping."""
+    return rc.Camera(projection=rc.PerspectiveProjection(fov_y=90., aspect=1., z_near=z_near, z_far=z_far))
+
 
 
 def setup_deferred_rendering():
