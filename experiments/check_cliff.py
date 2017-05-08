@@ -6,6 +6,7 @@ pyglet.options['debug_gl_trace'] = False
 
 import ratcave as rc
 from natnetclient import NatClient
+import utils
 
 ARENA_FILENAME = './assets/arena3uv.obj'
 CLIFF_FILENAME = './assets/viscliff3.obj'
@@ -14,10 +15,9 @@ SCREEN = 1
 FULLSCREEN = True
 CLIFF_SIDE = 'L' # L or R
 
-display = pyglet.window.get_platform().get_default_display()
-screen = display.get_screens()[SCREEN]
-window = pyglet.window.Window(fullscreen=FULLSCREEN, screen=screen, vsync=False)
-cube_fbo = rc.FBO(texture=rc.TextureCube(width=4096, height=4096))
+
+window = utils.setup_window(screen=SCREEN, fullscreen=FULLSCREEN)
+cube_fbo = utils.setup_cube_fbo()
 
 motive = NatClient(read_rate=2000)
 

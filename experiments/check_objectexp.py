@@ -6,6 +6,7 @@ pyglet.options['debug_gl_trace'] = False
 import ratcave as rc
 from natnetclient import NatClient
 import random
+import utils
 
 ARENA_FILENAME = './assets/arena3uv.obj'
 PROJECTOR_FILENAME = './calibration/p2.pickle'
@@ -21,10 +22,9 @@ VR_OBJECT_SCALE = .01
 VR_OBJECT_SIDE = 'R'
 VR_OBJECT_HEIGHT_OFFSET = .1
 
-display = pyglet.window.get_platform().get_default_display()
-screen = display.get_screens()[SCREEN]
-window = pyglet.window.Window(fullscreen=FULLSCREEN, screen=screen, vsync=False)
-cube_fbo = rc.FBO(texture=rc.TextureCube(width=2048, height=2048))
+
+window = utils.setup_window(screen=SCREEN, fullscreen=FULLSCREEN)
+cube_fbo = utils.setup_cube_fbo()
 
 motive = NatClient(read_rate=2000)
 
@@ -37,7 +37,7 @@ print('Original Arena Position: ', arena.position)
 arena.position.xyz = arena_rb.position
 arena.rotation.xyz = arena_rb.rotation
 arena.uniforms['flat_shading'] = False
-arena.texture = cube_fbo.texture
+# arena.texture = cube_fbo.texture
 
 def get_sphere(position, scale=.05):
     primitive_reader = rc.WavefrontReader(rc.resources.obj_primitives)
@@ -61,8 +61,8 @@ beamer = rc.Camera.from_pickle(PROJECTOR_FILENAME)
 beamer.projection.aspect = 1.7778
 beamer.projection.fov_y = 41.5
 
-# scene = rc.Scene(meshes=[arena, circle1, circle2], camera=beamer, bgColor=(1., 0, 0))
-scene = rc.Scene(meshes=[arena], camera=beamer, bgColor=(1., 0, 0))
+scene = rc.Scene(meshes=[arena, circle1, circle2], camera=beamer, bgColor=(1., 0, 0))
+# scene = rc.Scene(meshes=[arena], camera=beamer, bgColor=(1., 0, 0))
 scene.gl_states = scene.gl_states[:-1]
 scene.light.position.xyz = beamer.position.xyz
 
@@ -112,8 +112,8 @@ rat_rb = motive.rigid_bodies['Rat']
 @window.event
 def on_draw():
     with shader:
-        with cube_fbo as fbo:
-            vr_scene.draw360_to_texture(fbo.texture)
+        # with cube_fbo as fbo:
+        #     vr_scene.draw360_to_texture(fbo.texture)
         scene.draw()
         # vr_scene.draw()
     fps_display.draw()

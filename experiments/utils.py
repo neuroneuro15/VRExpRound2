@@ -27,6 +27,22 @@ def setup_window(screen=1, fullscreen=True):
     return window
 
 
+def setup_cube_fbo(width=4096):
+    """Return a ratcave FBO instance, pre-loaded with a TextureCube of length 'width'."""
+    return rc.FBO(texture=rc.TextureCube(width=4096, height=4096))
+
+
+def get_arena_with_rigidbody(arena_objfilename, motive_client, flat_shading=False):
+    arena = rc.WavefrontReader(arena_objfilename).get_mesh('Arena')
+    arena.uniforms['diffuse'] = 1., 1, 1
+    arena.rotation = arena.rotation.to_quaternion()
+    arena_rb = motive.rigid_bodies['Arena']
+
+    print('Original Arena Position: ', arena.position)
+    arena.position.xyz = arena_rb.position
+    arena.rotation.xyz = arena_rb.rotation
+    arena.uniforms['flat_shading'] = False
+
 def setup_deferred_rendering():
     """Return (Shader, FBO, QuadMesh) for deferred rendering."""
     fbo = rc.FBO(rc.Texture(width=4096, height=4096, mipmap=True))
