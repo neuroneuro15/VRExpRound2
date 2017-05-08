@@ -24,9 +24,7 @@ motive = NatClient(read_rate=2000)
 arena, arena_rb = utils.get_arena_with_rigidbody(arena_objfilename=ARENA_FILENAME, motive_client=motive, flat_shading=False)
 arena.texture = cube_fbo.texture
 
-beamer = rc.Camera.from_pickle(PROJECTOR_FILENAME)
-beamer.projection.aspect = 1.7778
-beamer.projection.fov_y = 41.5
+beamer = utils.get_beamer_camera(PROJECTOR_FILENAME)
 
 scene = rc.Scene(meshes=[arena], camera=beamer, bgColor=(1., 0, 0))
 scene.gl_states = scene.gl_states[:-1]

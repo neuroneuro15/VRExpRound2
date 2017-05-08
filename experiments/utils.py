@@ -46,6 +46,14 @@ def get_arena_with_rigidbody(arena_objfilename, motive_client, flat_shading=Fals
     return arena, arena_rb
 
 
+def get_beamer_camera(fname, aspect=1.7778, fov_y=41.5):
+    """Load ratcave CAmera from pickle file and apply aspect ratio and fov_y intrinsics."""
+    beamer = rc.Camera.from_pickle(fname)
+    beamer.projection.aspect = aspect
+    beamer.projection.fov_y = fov_y
+    return beamer
+
+
 def setup_deferred_rendering():
     """Return (Shader, FBO, QuadMesh) for deferred rendering."""
     fbo = rc.FBO(rc.Texture(width=4096, height=4096, mipmap=True))

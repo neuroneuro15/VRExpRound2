@@ -48,10 +48,7 @@ circle2 = get_sphere(POSITION_R, scale=CIRCLE_SCALE + .0015)
 circle1.parent = arena
 circle2.parent = arena
 
-
-beamer = rc.Camera.from_pickle(PROJECTOR_FILENAME)
-beamer.projection.aspect = 1.7778
-beamer.projection.fov_y = 41.5
+beamer = utils.get_beamer_camera(PROJECTOR_FILENAME)
 
 scene = rc.Scene(meshes=[arena, circle1, circle2], camera=beamer, bgColor=(1., 0, 0))
 # scene = rc.Scene(meshes=[arena], camera=beamer, bgColor=(1., 0, 0))
