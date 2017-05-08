@@ -42,12 +42,7 @@ if VR_WALL_VISIBLE:
     vr_wall.uniforms['ambient'] = (1.,) * 3
     vr_meshes.append(vr_wall)
 
-
-vr_arena = rc.WavefrontReader(ARENA_FILENAME).get_mesh('Arena')
-vr_arena.uniforms['diffuse'] = 1., 1, 1
-vr_arena.parent = arena
-vr_arena.uniforms['flat_shading'] = False
-vr_arena.texture = rc.Texture.from_image('./assets/uvgrid.png')
+vr_arena = utils.get_virtual_arena_mesh(arena_file=ARENA_FILENAME, arena_mesh=arena, objname='Arena', texture_filename='./assets/uvgrid.png')
 vr_meshes.append(vr_arena)
 
 vr_scene = rc.Scene(meshes=vr_meshes, bgColor=(1., 1., 1.))

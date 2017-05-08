@@ -36,12 +36,8 @@ fps_display = pyglet.window.FPSDisplay(window)
 
 
 arena_name = 'virArena' if 'l' in CLIFF_SIDE.lower() else 'virArena2'
-vr_arena = rc.WavefrontReader(CLIFF_FILENAME).get_mesh(arena_name)
-vr_arena.uniforms['diffuse'] = 1., 1, 1
-vr_arena.parent = arena
-vr_arena.uniforms['flat_shading'] = False
-vr_arena.texture = rc.Texture.from_image('./assets/uvgrid.png')
-
+vr_arena = utils.get_virtual_arena_mesh(arena_file=CLIFF_FILENAME, arena_mesh=arena, objname=arena_name,
+                                        texture_filename='./assets/uvgrid.png')
 vr_scene = rc.Scene(meshes=[vr_arena], bgColor=(1., 1., 1.))
 vr_scene.light.position.xyz = scene.light.position.xyz
 

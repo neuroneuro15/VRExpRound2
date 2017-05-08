@@ -60,6 +60,17 @@ def get_cubecamera(z_near=.004, z_far=1.5):
     return camera
 
 
+def get_virtual_arena_mesh(arena_file, arena_mesh, objname='Arena', texture_filename=None):
+    """Returns an arena mesh parented to another arena meesh and with lighting settings applied."""
+    vr_arena = rc.WavefrontReader(arena_file).get_mesh(objname)
+    vr_arena.uniforms['diffuse'] = 1., 1, 1
+    vr_arena.parent = arena_mesh
+    vr_arena.uniforms['flat_shading'] = False
+    if texture_filename:
+        vr_arena.texture = rc.Texture.from_image(texture_filename)
+    return vr_arena
+
+
 def update(dt, arena, cube_camera, motive_client):
     arena.position.xyz = motive_client.rigid_bodies['Arena'].position
     arena.rotation.xyzw = motive_client.rigid_bodies['Arena'].quaternion
