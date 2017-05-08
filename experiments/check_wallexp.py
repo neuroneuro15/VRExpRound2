@@ -5,7 +5,6 @@ pyglet.options['debug_gl_trace'] = False
 
 import ratcave as rc
 from natnetclient import NatClient
-import random
 import utils
 
 ARENA_FILENAME = './assets/arena3uv.obj'
