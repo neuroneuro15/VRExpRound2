@@ -32,8 +32,6 @@ arena.texture = cube_fbo.texture
 
 shader = rc.Shader.from_file(*rc.resources.genShader)
 
-fps_display = pyglet.window.FPSDisplay(window)
-
 
 def load_vr_obj_mesh(obj_filename, mesh_name, arena, position, scale=VR_OBJECT_SCALE):
     vr_obj_reader = rc.WavefrontReader(obj_filename)
@@ -70,7 +68,6 @@ def on_draw():
             vr_scene.draw360_to_texture(fbo.texture)
         scene.draw()
         # vr_scene.draw()
-    fps_display.draw()
 
 
 pyglet.clock.schedule(utils.update, arena, vr_scene.camera, motive)

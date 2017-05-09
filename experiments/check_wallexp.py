@@ -24,9 +24,6 @@ arena.texture = cube_fbo.texture
 
 shader = rc.Shader.from_file(*rc.resources.genShader)
 
-fps_display = pyglet.window.FPSDisplay(window)
-
-
 vr_meshes = []
 
 if VR_WALL_VISIBLE:
@@ -54,8 +51,6 @@ def on_draw():
     with shader:
         with cube_fbo as fbo:
             vr_scene.draw360_to_texture(fbo.texture)
-        scene.draw()
-    fps_display.draw()
 
 
 pyglet.clock.schedule(utils.update, arena, vr_scene.camera, motive)
