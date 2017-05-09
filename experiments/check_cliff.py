@@ -21,31 +21,20 @@ cube_fbo = utils.setup_cube_fbo()
 
 motive = NatClient(read_rate=2000)
 
-arena, arena_rb = utils.get_arena_with_rigidbody(arena_objfilename=ARENA_FILENAME, motive_client=motive, flat_shading=False)
+
+scene, arena, arena_rb = utils.load_projected_scene(arena_file=ARENA_FILENAME,
+                                                    projector_file=PROJECTOR_FILENAME,
+                                                    motive_client=motive)
 arena.texture = cube_fbo.texture
 
-beamer = utils.get_beamer_camera(PROJECTOR_FILENAME)
-
-scene = rc.Scene(meshes=[arena], camera=beamer, bgColor=(1., 0, 0))
-scene.gl_states = scene.gl_states[:-1]
-scene.light.position.xyz = beamer.position.xyz
-
 shader = rc.Shader.from_file(*rc.resources.genShader)
-
-fps_display = pyglet.window.FPSDisplay(window)
-
 
 arena_name = 'virArena' if 'l' in CLIFF_SIDE.lower() else 'virArena2'
 vr_arena = utils.get_virtual_arena_mesh(arena_file=CLIFF_FILENAME, arena_mesh=arena, objname=arena_name,
                                         texture_filename='./assets/uvgrid.png')
-vr_scene = rc.Scene(meshes=[vr_arena], bgColor=(1., 1., 1.))
-vr_scene.light.position.xyz = scene.light.position.xyz
 
-vr_scene.gl_states = vr_scene.gl_states[:-1]
-cube_camera = utils.get_cubecamera()
-vr_scene.camera = cube_camera
-rat_rb = motive.rigid_bodies['Rat']
-
+vr_scene = utils.load_virtual_scene(active_scene=scene)
+vr_scene.meshes = vr_arena
 
 @window.event
 def on_draw():
@@ -53,8 +42,7 @@ def on_draw():
         with cube_fbo as fbo:
             vr_scene.draw360_to_texture(fbo.texture)
         scene.draw()
-    fps_display.draw()
 
 
-pyglet.clock.schedule(utils.update, arena, cube_camera, motive)
+pyglet.clock.schedule(utils.update, arena, vr_scene.camera, motive)
 pyglet.app.run()

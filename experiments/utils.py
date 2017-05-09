@@ -60,6 +60,14 @@ def get_cubecamera(z_near=.004, z_far=1.5):
     return camera
 
 
+def load_virtual_scene(active_scene, bgColor=(0., 0., 0.)):
+    """Return a scene with a cube camera and a light in the same position as the active_scene's light."""
+    scene = rc.Scene(meshes=[], bgColor=bgColor, camera=get_cubecamera())
+    scene.light.position.xyz = active_scene.light.position.xyz
+    scene.gl_states = scene.gl_states[:-1]
+    return scene
+
+
 def get_virtual_arena_mesh(arena_file, arena_mesh, objname='Arena', texture_filename=None):
     """Returns an arena mesh parented to another arena meesh and with lighting settings applied."""
     vr_arena = rc.WavefrontReader(arena_file).get_mesh(objname)
@@ -69,6 +77,9 @@ def get_virtual_arena_mesh(arena_file, arena_mesh, objname='Arena', texture_file
     if texture_filename:
         vr_arena.texture = rc.Texture.from_image(texture_filename)
     return vr_arena
+
+
+
 
 
 def update(dt, arena, cube_camera, motive_client):

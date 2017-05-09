@@ -59,12 +59,8 @@ else:
 vr_arena = utils.get_virtual_arena_mesh(arena_file=ARENA_FILENAME, arena_mesh=arena, objname='Arena', texture_filename='./assets/uvgrid.png')
 vr_meshes.append(vr_arena)
 
-vr_scene = rc.Scene(meshes=vr_meshes, bgColor=(1., 1., 1.))
-vr_scene.light.position.xyz = scene.light.position.xyz
-vr_scene.gl_states = vr_scene.gl_states[:-1]
-cube_camera = utils.get_cubecamera()
-vr_scene.camera = cube_camera
-rat_rb = motive.rigid_bodies['Rat']
+vr_scene = utils.load_virtual_scene(active_scene=scene)
+vr_scene.meshes = vr_meshes
 
 
 @window.event
@@ -77,5 +73,5 @@ def on_draw():
     fps_display.draw()
 
 
-pyglet.clock.schedule(utils.update, arena, cube_camera, motive)
+pyglet.clock.schedule(utils.update, arena, vr_scene.camera, motive)
 pyglet.app.run()
