@@ -6,20 +6,15 @@ pyglet.options['debug_gl_trace'] = False
 import ratcave as rc
 from natnetclient import NatClient
 import utils
+import cfg
 
-ARENA_FILENAME = './assets/arena3uv.obj'
-PROJECTOR_FILENAME = './calibration/p2.pickle'
-SCREEN = 1
-FULLSCREEN = True
-
-
-window = utils.setup_window(screen=SCREEN, fullscreen=FULLSCREEN)
+window = utils.setup_window(screen=cfg.SCREEN, fullscreen=cfg.FULLSCREEN)
 
 motive = NatClient(read_rate=2000)
 
 
-scene, arena, arena_rb = utils.load_projected_scene(arena_file=ARENA_FILENAME,
-                                                    projector_file=PROJECTOR_FILENAME,
+scene, arena, arena_rb = utils.load_projected_scene(arena_file=cfg.ARENA_FILENAME,
+                                                    projector_file=cfg.PROJECTOR_FILENAME,
                                                     motive_client=motive)
 beamer = scene.camera
 
