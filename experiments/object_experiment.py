@@ -15,8 +15,13 @@ vr_object.uniforms['flat_shading'] = False
 vr_object.uniforms['ambient'] = (1.,) * 3
 vr_object.texture = './assets/uvgrid.png'
 
-vr_scene = rc.Scene(meshes=[vr_arena, vr_object])
+vr_scene_without_object = rc.Scene(meshes=[vr_arena])
+vr_scene_with_object = rc.Scene(meshes=[vr_arena, vr_object])
 
 app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_FILENAME)
-app.register_vr_scene(vr_scene)
+app.register_vr_scene(vr_scene_with_object)
+app.register_vr_scene(vr_scene_without_object)
+
+app.current_vr_scene = vr_scene_with_object
+
 app.run()

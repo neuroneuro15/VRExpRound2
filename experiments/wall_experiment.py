@@ -19,8 +19,13 @@ vr_wall.uniforms['specular'] = 0., 0., 0.
 vr_wall.texture = rc.Texture.from_image('./assets/uvgrid.png')
 vr_wall.uniforms['ambient'] = (1.,) * 3
 
-vr_scene = rc.Scene(meshes=[vr_arena, vr_wall], bgColor=(1., 1., 0.))
+vr_scene_with_wall = rc.Scene(meshes=[vr_arena, vr_wall])
+vr_scene_without_wall = rc.Scene(meshes=[vr_arena])
 
 app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_FILENAME)
-app.register_vr_scene(vr_scene)
+app.register_vr_scene(vr_scene_with_wall)
+app.register_vr_scene(vr_scene_without_wall)
+
+app.current_vr_scene = vr_scene_with_wall
+
 app.run()
