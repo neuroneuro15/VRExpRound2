@@ -5,15 +5,15 @@ import ratcave as rc
 import cfg
 
 vr_arena = rc.WavefrontReader(cfg.ARENA_FILENAME).get_mesh('Arena')
-vr_arena.texture = './assets/uvgrid.png'
+vr_arena.texture = cfg.ARENA_LIGHTING_TEXTURE
 
 vr_object = rc.WavefrontReader(cfg.VR_OBJECTS_FILENAME).get_mesh(cfg.VR_OBJECT_NAME, scale=cfg.VR_OBJECT_SCALE)
 vr_object.position.xyz = cfg.POSITION_L if 'l' in cfg.VR_OBJECT_SIDE.lower() else cfg.POSITION_R
-vr_object.uniforms['diffuse'] = (.5,) * 3
-vr_object.uniforms['specular'] = 0., 0., 0.
-vr_object.uniforms['flat_shading'] = False
-vr_object.uniforms['ambient'] = (1.,) * 3
-vr_object.texture = './assets/uvgrid.png'
+vr_object.uniforms['diffuse'] = cfg.VR_OBJECT_LIGHTING_DIFFUSE
+vr_object.uniforms['specular'] = cfg.VR_OBJECT_LIGHTING_SPECULAR
+vr_object.uniforms['ambient'] = cfg.VR_OBJECT_LIGHTING_AMBIENT
+vr_object.uniforms['flat_shading'] = cfg.VR_OBJECT_LIGHTING_FLAT_SHADING
+vr_object.texture = cfg.VR_OBJECT_LIGHTING_TEXTURE
 
 vr_scene_without_object = rc.Scene(meshes=[vr_arena])
 vr_scene_with_object = rc.Scene(meshes=[vr_arena, vr_object])
