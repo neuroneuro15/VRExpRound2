@@ -28,6 +28,8 @@ class RatcaveApp(pyglet.window.Window):
                                                     projector_file=projector_file,
                                                     motive_client=motive)
 
+        self.orig_texture = None
+
         self.shader = rc.Shader.from_file(*rc.resources.genShader)
         self._vr_scenes = set()
         self.current_vr_scene = None
@@ -70,6 +72,8 @@ class RatcaveApp(pyglet.window.Window):
             raise TypeError("scene must be a ratcave Scene instance.")
 
         if not self.vr_scenes:
+            if self.arena.texture:
+                self.orig_texture = self.arena.texture
             self.arena.texture = self.cube_fbo.texture
 
         if parent_to_arena:
@@ -101,10 +105,13 @@ class RatcaveApp(pyglet.window.Window):
             raise TypeError("current_vr_scene must be a ratcave.Scene or None")
         if isinstance(scene, type(None)):
             self._current_vr_scene = None
+            if self.orig_texture:
+                self.arena.texture = self.orig_texture
             return
         if scene not in self.vr_scenes:
             raise ValueError("scene not in vr_scenes.  Use RatcaveApp.register_vr_scene() to register the scene first.")
         self._current_vr_scene = scene
+        self.arena.texture = self.cube_fbo.texture
 
     def run(self):
         """Runs the application's event loop."""
