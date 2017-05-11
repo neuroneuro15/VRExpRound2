@@ -6,7 +6,15 @@ import ratcave as rc
 
 if not cfg.CLIFF_SIDE.lower() in 'lr':
     raise ValueError("CLIFF_SIDE must be 'L' or 'R'.")
-arena_name = cfg.CLIFF_OBJECT_L if 'l' in cfg.CLIFF_SIDE.lower() else cfg.CLIFF_OBJECT_R
+
+if 'real' in cfg.CLIFF_TYPE.lower():
+    arena_name = cfg.CLIFF_OBJECT_REAL
+elif 'l' in cfg.CLIFF_SIDE.lower():
+    arena_name = cfg.CLIFF_OBJECT_L
+elif 'r' in cfg.CLIFF_SIDE.lower():
+    arena_name = cfg.CLIFF_OBJECT_R
+
+# arena_name = cfg.CLIFF_OBJECT_L if 'l' in cfg.CLIFF_SIDE.lower() else cfg.CLIFF_OBJECT_R
 vr_arena = rc.WavefrontReader(cfg.CLIFF_FILENAME).get_mesh(arena_name)
 vr_arena.texture = cfg.ARENA_LIGHTING_TEXTURE
 vr_arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING

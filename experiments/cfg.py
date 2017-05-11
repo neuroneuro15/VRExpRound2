@@ -15,9 +15,11 @@ FULLSCREEN = True
 
 # Cliff experiment settings
 CLIFF_FILENAME = './assets/viscliff3b.obj'
+CLIFF_TYPE = 'Real'  # or VR, or Static
 CLIFF_SIDE = 'R' # L or R
 CLIFF_OBJECT_L = 'virArena'
-CLIFF_OBJECT_R = 'RealArena'#'virArena2'
+CLIFF_OBJECT_R = 'virArena2'
+CLIFF_OBJECT_REAL = 'RealArena'
 
 # Wall experiment settings
 VR_WALL_VISIBLE = True
