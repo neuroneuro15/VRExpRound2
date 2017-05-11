@@ -14,10 +14,10 @@ SCREEN = 1
 FULLSCREEN = True
 
 # Cliff experiment settings
-CLIFF_FILENAME = './assets/viscliff3.obj'
-CLIFF_SIDE = 'L' # L or R
+CLIFF_FILENAME = './assets/viscliff3b.obj'
+CLIFF_SIDE = 'R' # L or R
 CLIFF_OBJECT_L = 'virArena'
-CLIFF_OBJECT_R = 'virArena2'
+CLIFF_OBJECT_R = 'RealArena'#'virArena2'
 
 # Wall experiment settings
 VR_WALL_VISIBLE = True
@@ -42,7 +42,7 @@ POSITION_R = -.195, -.14, .015#-.205, -.14, .015
 VR_OBJECTS_FILENAME = './assets/Eng_AllObjs1.obj'
 VR_OBJECT_VISIBLE = True
 VR_OBJECT_NAMES = ['Snake', 'Torus', 'Monkey', 'Masher', 'Moon', 'Pyramid', 'Mine']
-VR_OBJECT_NAME = 'Masher'
+VR_OBJECT_NAME = 'Mine'
 VR_OBJECT_SCALE = .01
 VR_OBJECT_SIDE = 'L'
 VR_OBJECT_LIGHTING_DIFFUSE = (1.3,) * 3
