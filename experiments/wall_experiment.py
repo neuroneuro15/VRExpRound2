@@ -5,7 +5,9 @@ import ratcave as rc
 import cfg
 import pyglet
 import events
+import subprocess
 
+subprocess.Popen(['holdtimer'])
 
 vr_arena = rc.WavefrontReader(cfg.ARENA_FILENAME).get_mesh('Arena')
 vr_arena.texture = cfg.ARENA_LIGHTING_TEXTURE
@@ -37,25 +39,25 @@ app.current_vr_scene = None #vr_scene_with_wall
 
 
 seq = [
-    events.wait_duration(5.),
+    events.wait_duration(cfg.VR_OBJECT_PHASE_1_DURATION_SECS),
     events.fade_to_black(app.arena),
-    events.wait_duration(4.),
+    events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
     events.set_scene_to(app, vr_scene_without_wall),
     events.fade_to_white(app.arena),
-    events.wait_duration(5.),
+    events.wait_duration(cfg.VR_OBJECT_PHASE_2_DURATION_SECS),
     events.fade_to_black(app.arena),
-    events.wait_duration(4.),
+    events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
     events.set_scene_to(app, vr_scene_with_wall),
     events.fade_to_white(app.arena),
-    events.wait_duration(5.),
+    events.wait_duration(cfg.VR_OBJECT_PHASE_3_DURATION_SECS),
     events.fade_to_black(app.arena),
-    events.wait_duration(4.),
+    events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
     events.set_scene_to(app, vr_scene_without_wall),
     events.fade_to_white(app.arena),
-    events.wait_duration(5.)
+    events.wait_duration(cfg.VR_OBJECT_PHASE_4_DURATION_SECS)
 ]
 
-exp = events.chain_events(seq)
+exp = events.chain_events(seq, log=True)
 exp.next()
 
 def update_phase(dt):

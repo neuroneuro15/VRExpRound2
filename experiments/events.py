@@ -1,4 +1,6 @@
-#
+import logging
+from collections import deque
+
 def fade_to_black(mesh, speed=1.):
     vel = -speed
     while mesh.uniforms['diffuse'][0] > 0.:
@@ -28,18 +30,25 @@ def send_robo_command(device, msg):
     device.write(msg)
 
 
-def chain_events(events):
-    events = list(events[::-1])
-    for event in events:
+def chain_events(events, log=True):
+
+    def init_next_event():
+        event = events.popleft()
         event.next()
+        if log:
+            logging.warn(event.__name__)
+        return event
+
+    events = deque(events)
+    event = init_next_event()
     while True:
         dt = yield
         try:
-            events[-1].send(dt)
+            event.send(dt)
         except StopIteration:
-            events.pop()
+            event = init_next_event()
         except IndexError:
             raise StopIteration
 
 
-# def log_item(filename, )
+

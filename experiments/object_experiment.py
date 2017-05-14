@@ -7,6 +7,9 @@ import cfg
 import pyglet
 from serial import Serial
 import events
+import subprocess
+
+subprocess.Popen(['holdtimer'])
 
 vr_arena = rc.WavefrontReader(cfg.ARENA_FILENAME).get_mesh('Arena')
 vr_arena.texture = cfg.ARENA_LIGHTING_TEXTURE
