@@ -4,6 +4,8 @@ from app import motive, RatcaveApp
 import ratcave as rc
 import cfg
 import pyglet
+import events
+
 
 vr_arena = rc.WavefrontReader(cfg.ARENA_FILENAME).get_mesh('Arena')
 vr_arena.texture = cfg.ARENA_LIGHTING_TEXTURE
@@ -34,19 +36,32 @@ app.register_vr_scene(vr_scene_without_wall)
 app.current_vr_scene = None #vr_scene_with_wall
 
 
-app.time = 0.
-def update_phase(dt):
-    app.time += dt
+seq = [
+    events.wait_duration(5.),
+    events.fade_to_black(app.arena),
+    events.wait_duration(4.),
+    events.set_scene_to(app, vr_scene_without_wall),
+    events.fade_to_white(app.arena),
+    events.wait_duration(5.),
+    events.fade_to_black(app.arena),
+    events.wait_duration(4.),
+    events.set_scene_to(app, vr_scene_with_wall),
+    events.fade_to_white(app.arena),
+    events.wait_duration(5.),
+    events.fade_to_black(app.arena),
+    events.wait_duration(4.),
+    events.set_scene_to(app, vr_scene_without_wall),
+    events.fade_to_white(app.arena),
+    events.wait_duration(5.)
+]
 
-    if app.time < cfg.VR_WALL_PHASE_1_DURATION_SECS:
-        app.current_vr_scene = None
-    elif app.time < cfg.VR_WALL_PHASE_1_DURATION_SECS + cfg.VR_WALL_PHASE_2_DURATION_SECS:
-        app.current_vr_scene = vr_scene_without_wall
-    elif app.time < cfg.VR_WALL_PHASE_1_DURATION_SECS + cfg.VR_WALL_PHASE_2_DURATION_SECS + cfg.VR_WALL_PHASE_3_DURATION_SECS:
-        app.current_vr_scene = vr_scene_with_wall
-    elif app.time < cfg.VR_WALL_PHASE_1_DURATION_SECS + cfg.VR_WALL_PHASE_2_DURATION_SECS + cfg.VR_WALL_PHASE_3_DURATION_SECS + cfg.VR_WALL_PHASE_4_DURATION_SECS:
-        app.current_vr_scene = vr_scene_without_wall
-    else:
+exp = events.chain_events(seq)
+exp.next()
+
+def update_phase(dt):
+    try:
+        exp.send(dt)
+    except StopIteration:
         app.close()
 pyglet.clock.schedule(update_phase)
 

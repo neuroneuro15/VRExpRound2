@@ -1,9 +1,12 @@
 from __future__ import print_function
 
+import itertools
 from app import motive, RatcaveApp
 import ratcave as rc
 import cfg
 import pyglet
+from serial import Serial
+import events
 
 vr_arena = rc.WavefrontReader(cfg.ARENA_FILENAME).get_mesh('Arena')
 vr_arena.texture = cfg.ARENA_LIGHTING_TEXTURE
@@ -34,21 +37,39 @@ app.register_vr_scene(vr_scene_without_object)
 
 app.current_vr_scene = None
 
+robo_arm = Serial(cfg.ARDUINO_PORT, timeout=0.5)
 
-app.time = 0.
-def update_phase(dt):
-    app.time += dt
+seq = [
+    events.wait_duration(5.),
+    events.fade_to_black(app.arena),
+    events.wait_duration(4.),
+    events.set_scene_to(app, vr_scene_without_object),
+    events.fade_to_white(app.arena),
+    events.wait_duration(5.),
+    events.fade_to_black(app.arena),
+    events.send_robo_command(robo_arm, b'U'),
+    events.wait_duration(4.),
+    events.set_scene_to(app, vr_scene_with_object),
+    events.fade_to_white(app.arena),
+    events.wait_duration(5.),
+    events.fade_to_black(app.arena),
+    events.send_robo_command(robo_arm, b'D'),
+    events.wait_duration(4.),
+    events.set_scene_to(app, vr_scene_without_object),
+    events.fade_to_white(app.arena),
+    events.wait_duration(5.)
+]
 
-    if app.time < cfg.VR_OBJECT_PHASE_1_DURATION_SECS:
-        app.current_vr_scene = None
-    elif app.time < cfg.VR_OBJECT_PHASE_1_DURATION_SECS + cfg.VR_OBJECT_PHASE_2_DURATION_SECS:
-        app.current_vr_scene = vr_scene_without_object
-    elif app.time < cfg.VR_OBJECT_PHASE_1_DURATION_SECS + cfg.VR_OBJECT_PHASE_2_DURATION_SECS + cfg.VR_OBJECT_PHASE_3_DURATION_SECS:
-        app.current_vr_scene = vr_scene_with_object
-    elif app.time < cfg.VR_OBJECT_PHASE_1_DURATION_SECS + cfg.VR_OBJECT_PHASE_2_DURATION_SECS + cfg.VR_OBJECT_PHASE_3_DURATION_SECS + cfg.VR_OBJECT_PHASE_4_DURATION_SECS:
-        app.current_vr_scene = vr_scene_without_object
-    else:
+exp = events.chain_events(seq)
+exp.next()
+
+
+def update_scene(dt):
+    try:
+        exp.send(dt)
+    except StopIteration:
         app.close()
-pyglet.clock.schedule(update_phase)
+
+pyglet.clock.schedule(update_scene)
 
 app.run()
