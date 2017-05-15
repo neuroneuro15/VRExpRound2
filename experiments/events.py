@@ -31,7 +31,6 @@ def send_robo_command(device, msg):
 
 
 def chain_events(events, log=True):
-
     def init_next_event():
         event = events.popleft()
         event.next()

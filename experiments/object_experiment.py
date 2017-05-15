@@ -8,6 +8,12 @@ import pyglet
 from serial import Serial
 import events
 import subprocess
+import logging
+
+logging.basicConfig(filename='vr_exp2.log', level=logging.INFO,
+                    format='%(asctime)s, %(message)')
+
+
 
 subprocess.Popen(['holdtimer'])
 
@@ -31,7 +37,10 @@ if cfg.VR_OBJECT_LIGHTING_TEXTURE:
 vr_scene_without_object = rc.Scene(meshes=[vr_arena])
 vr_scene_with_object = rc.Scene(meshes=[vr_arena, vr_object])
 
-app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_FILENAME)
+app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_FILENAME,
+                 fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN)
+app.set_mouse_visible(cfg.MOUSE_CURSOR_VISIBLE)
+
 app.arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 # app.arena.texture = cfg.ARENA_LIGHTING_TEXTURE
 

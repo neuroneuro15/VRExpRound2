@@ -22,7 +22,10 @@ vr_arena.uniforms['diffuse'] = cfg.ARENA_LIGHTING_DIFFUSE
 vr_arena.uniforms['specular'] = cfg.ARENA_LIGHTING_SPECULAR
 vr_scene = rc.Scene(meshes=[vr_arena])
 
-app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_FILENAME)
+app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_FILENAME,
+                 fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN)
+app.set_mouse_visible(cfg.MOUSE_CURSOR_VISIBLE)
+
 app.arena.texture = cfg.ARENA_LIGHTING_TEXTURE
 app.arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 app.arena.uniforms['diffuse'] = cfg.ARENA_LIGHTING_DIFFUSE

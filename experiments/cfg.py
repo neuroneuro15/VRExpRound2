@@ -10,13 +10,15 @@ ARENA_LIGHTING_SPECULAR = 0., 0., 0.
 ARENA_LIGHTING_TEXTURE = './assets/uvgrid_bw.png'
 ARENA_LIGHTING_FLAT_SHADING = True
 PROJECTOR_FILENAME = './calibration/p2.pickle'
-SCREEN = 1
-FULLSCREEN = True
-ARDUINO_PORT = 'COM1'
+SCREEN = 0 #1
+FULLSCREEN = False #True
+MOUSE_CURSOR_VISIBLE = False
+ARDUINO_PORT = 'COM7'
+
 
 # Cliff experiment settings
 CLIFF_FILENAME = './assets/viscliff3b.obj'
-CLIFF_TYPE = 'VR'  # or VR, or Static
+CLIFF_TYPE = 'VR'  # Real, or VR, or Static
 CLIFF_SIDE = 'L' # L or R
 CLIFF_OBJECT_L = 'virArena'
 CLIFF_OBJECT_R = 'virArena2'
