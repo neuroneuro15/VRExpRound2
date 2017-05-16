@@ -4,11 +4,13 @@ import logging
 from collections import deque
 from numpy import array, linalg
 
+
 def fade_to_black(mesh, speed=1.):
     vel = -speed
     while mesh.uniforms['diffuse'][0] > 0.:
         dt = yield
         mesh.uniforms['diffuse'] = [dif + (vel  * dt) for dif in mesh.uniforms['diffuse']]
+
 
 def fade_to_white(mesh, speed=1.):
     vel = speed
@@ -16,12 +18,14 @@ def fade_to_white(mesh, speed=1.):
         dt = yield
         mesh.uniforms['diffuse'] = [dif + (vel  * dt) for dif in mesh.uniforms['diffuse']]
 
+
 def wait_duration(duration):
     total_time = duration
     curr_time = 0.
     while curr_time < total_time:
         dt = yield
         curr_time += dt
+
 
 def set_scene_to(app, new_scene):
     dt = yield
@@ -32,9 +36,11 @@ def send_robo_command(device, msg):
     dt = yield
     device.write(msg)
 
+
 def wait_for_recording(motive_client):
     while not motive_client.is_recording:
         dt = yield
+
 
 def wait_for_distance_exceeded(rb1, rb2, distance):
     while linalg.norm(array(rb1.position) - array(rb2.position)) < distance:
@@ -47,6 +53,13 @@ def wait_for_distance_under(rb1, rb2, distance):
 def change_scene_background_color(scene, color):
     dt = yield
     scene.bgColor = color
+
+
+def close_app(app):
+    dt = yield
+    app.close()
+    dt = yield  # Dummy round, just to keep StopIteration from being raised and prematurely end the app with an exception.
+
 
 def chain_events(events, log=True, motive_client=None):
     def init_next_event():
@@ -68,9 +81,10 @@ def chain_events(events, log=True, motive_client=None):
         try:
             event.send(dt)
         except StopIteration:
-            event = init_next_event()
-        except IndexError:
-            raise StopIteration
+            try:
+                event = init_next_event()
+            except IndexError:
+                raise StopIteration
 
 
 

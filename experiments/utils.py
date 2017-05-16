@@ -2,7 +2,9 @@ import pyglet
 import ratcave as rc
 from collections import namedtuple
 from pypixxlib import propixx
-
+import json
+import logging
+import cfg
 
 RenderCollection = namedtuple("RenderCollection", "shader fbo quad")
 
@@ -139,4 +141,20 @@ def setup_grey3x_rendering(update_projector=False):
     return RenderCollection(shader=shader, fbo=None, quad=quad)
 
 
+def create_and_configure_experiment_logs(filename, motive_client, exclude_subnames=[]):
+    """
+    Sets the csv logging config and writes the json sesssion config log from cfg.py, excluding all variables that contain
+    any of the substrings in 'exclude_subnames'.
+    """
+    filename_settings = 'logs/settings_logs/' + filename + '.json'
+    with open(filename_settings, 'w') as f:
+        json.dump({var: cfg.__dict__[var] for var in dir(cfg) if not '_' in var[0] and not any(substring in var for substring in exclude_subnames)}, f, sort_keys=True, indent=4)
 
+    filename_log = 'logs/event_logs/' + filename + '.csv'
+    with open(filename_log, 'a') as f:
+        f.write('DateTime; MotiveExpTimeSecs; Event; EventArguments\n')
+
+    logging.basicConfig(filename=filename_log,
+                        level=logging.INFO, format='%(asctime)s; %(message)s')
+
+    motive_client.set_take_file_name(file_name=filename)

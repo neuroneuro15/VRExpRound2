@@ -10,6 +10,12 @@ import utils
 
 
 motive = NatClient(read_rate=2000)
+if not motive.rigid_bodies:
+    raise IOError("Not Detecting Rigid Bodies.  Turn RigidBody Streaming On in the Motive Streaming Pane.")
+
+if not motive.rigid_bodies['Arena'].position:
+    raise IOError("Not Detecting Arena Position.  Turn RigidBody Streaming on in the Motive Streaming Pane.")
+
 
 class RatcaveApp(pyglet.window.Window):
 
