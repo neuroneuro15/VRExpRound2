@@ -22,8 +22,9 @@ conditions = {'RAT': cfg.RAT,
               'PAPER_LOG_CODE': cfg.PAPER_LOG_CODE,
               'VR_OBJECT_NAME': cfg.VR_OBJECT_NAME,
               'VR_OBJECT_SIDE': cfg.VR_OBJECT_SIDE,
+              'VR_OBJECT_TYPE': cfg.VR_OBJECT_TYPE,
               }
-dlg = DlgFromDict(conditions, title='Virtual Object Experiment')
+dlg = DlgFromDict(conditions, title='{} Experiment Settings'.format(cfg.VR_OBJECT_EXPERIMENT_NAME))
 if dlg.OK:
     log_code = dlg.dictionary['PAPER_LOG_CODE']
     if not 'test' in dlg.dictionary['RAT'].lower():
@@ -31,7 +32,7 @@ if dlg.OK:
             raise ValueError("Invalid PAPER_LOG_CODE.  Please try again.")
         subprocess.Popen(['holdtimer'])  # Launch the timer program
 
-    dlg.dictionary['EXPERIMENT'] = 'wall'
+    dlg.dictionary['EXPERIMENT'] = cfg.VR_OBJECT_EXPERIMENT_NAME
     cfg.__dict__.update(dlg.dictionary)
 else:
     sys.exit()
@@ -72,7 +73,7 @@ app.current_vr_scene = None
 # Make logfiles and set filenames
 now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 filename = '{expname}_{datetime}_{RAT}_{VR_OBJECT_SIDE}_{object_name}_{person}_{log_code}'.format(
-    expname=cfg.EXPERIMENT, datetime=now, RAT=cfg.RAT,
+    expname=cfg.VR_OBJECT_EXPERIMENT_NAME, datetime=now, RAT=cfg.RAT,
     VR_OBJECT_SIDE=cfg.VR_OBJECT_SIDE, object_name=cfg.VR_OBJECT_NAME, person=cfg.EXPERIMENTER[0].upper(),
     log_code=cfg.PAPER_LOG_CODE)
 utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
@@ -81,7 +82,7 @@ utils.create_and_configure_experiment_logs(filename=filename, motive_client=moti
 
 # Build experiment event sequence
 seq = []
-if not 'test' in cfg.RAT.lower():
+if 'test' not in cfg.RAT.lower():
     motive_seq = [
         events.change_scene_background_color(scene=app.active_scene, color=(0., 0., 1.)),
         events.wait_for_recording(motive_client=motive),
@@ -125,6 +126,3 @@ exp.next()
 # Schedule the event sequence and run the VR App!
 pyglet.clock.schedule(exp.send)
 app.run()
-
-
-

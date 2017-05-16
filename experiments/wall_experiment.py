@@ -13,10 +13,13 @@ import utils
 
 
 # Show User-Defined Experiment Settings
-conditions = {'RAT': cfg.RAT, 'VR_WALL_X_OFFSET': cfg.VR_WALL_X_OFFSET,
-              'EXPERIMENTER': cfg.EXPERIMENTER, 'PAPER_LOG_CODE': cfg.PAPER_LOG_CODE}
+conditions = {'RAT': cfg.RAT,
+              'EXPERIMENTER': cfg.EXPERIMENTER,
+              'VR_WALL_X_OFFSET': cfg.VR_WALL_X_OFFSET,
+              'PAPER_LOG_CODE': cfg.PAPER_LOG_CODE,
+              }
 
-dlg = DlgFromDict(conditions, title='Virtual Wall Experiment')
+dlg = DlgFromDict(conditions, title='{} Experiment Settings'.format(cfg.VR_WALL_EXPERIMENT_NAME))
 if dlg.OK:
     log_code = dlg.dictionary['PAPER_LOG_CODE']
     if not 'test' in dlg.dictionary['RAT'].lower():
@@ -25,7 +28,7 @@ if dlg.OK:
         dlg.dictionary['PAPER_LOG_CODE'] = log_code.upper()
         subprocess.Popen(['holdtimer'])  # Launch the timer program
 
-    dlg.dictionary['EXPERIMENT'] = 'wall'
+    dlg.dictionary['EXPERIMENT'] = cfg.VR_WALL_EXPERIMENT_NAME
     cfg.__dict__.update(dlg.dictionary)
 else:
     sys.exit()
@@ -72,7 +75,7 @@ app.current_vr_scene = None #vr_scene_with_wall
 # Make logfiles and set filenames
 now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 filename = '{expname}_{datetime}_{RAT}_{VR_WALL_X_OFFSET}_{person}_{log_code}'.format(
-    expname='VRWallExp', datetime=now, RAT=cfg.RAT,
+    expname=cfg.VR_WALL_EXPERIMENT_NAME, datetime=now, RAT=cfg.RAT,
     VR_WALL_X_OFFSET=cfg.VR_WALL_X_OFFSET, person=cfg.EXPERIMENTER[0].upper(),
     log_code=cfg.PAPER_LOG_CODE)
 utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,

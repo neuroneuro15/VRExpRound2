@@ -1,4 +1,3 @@
-EXPERIMENT = ['cliff', 'wall', 'object_exploration']
 RAT = ['Test', 'VR-1A', 'VR-1B', 'VR-2A', 'VR-2B', 'VR-3A', 'VR-3B', 'VR-4A', 'VR-4B', 'VR-5A', 'VR-5B']
 EXPERIMENTER = ['Nicholas A. Del Grosso', 'Eduardo Blanco-Hernandez']
 # General settings
@@ -22,6 +21,7 @@ CLIFF_OBJECT_R = 'virArena2'
 CLIFF_OBJECT_REAL = 'RealArena'
 
 # Wall experiment settings
+VR_WALL_EXPERIMENT_NAME = 'VRWallExp'
 VR_WALL_VISIBLE = True
 VR_WALL_X_OFFSET = [-.3, -.1, .1, .3]
 VR_WALL_Y_OFFSET = .28
@@ -38,6 +38,8 @@ VR_WALL_PHASE_3_DURATION_SECS = 240.
 VR_WALL_PHASE_4_DURATION_SECS = 240.
 
 # Object experiment settings
+VR_OBJECT_EXPERIMENT_NAME = 'VRObjectExp'
+VR_OBJECT_TYPE = ['Real', 'VR']
 VR_OBJECT_POSITION_L = .230, -0.133, -.06
 VR_OBJECT_POSITION_R = -.195, -.13, .015#-.205, -.14, .015
 VR_OBJECT_FILENAME = './assets/Eng_AllObjs1.obj'
