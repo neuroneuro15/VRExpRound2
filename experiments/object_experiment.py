@@ -73,16 +73,6 @@ app.register_vr_scene(vr_scene_without_object)
 app.current_vr_scene = None
 
 
-# Make logfiles and set filenames
-if cfg.RAT.lower() not in ['demo']:
-    now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    filename = '{expname}_{datetime}_{RAT}_{VR_OBJECT_SIDE}_{object_name}_{person}_{log_code}'.format(
-        expname=cfg.VR_OBJECT_EXPERIMENT_NAME, datetime=now, RAT=cfg.RAT,
-        VR_OBJECT_SIDE=cfg.VR_OBJECT_SIDE, object_name=cfg.VR_OBJECT_NAME, person=cfg.EXPERIMENTER[0].upper(),
-        log_code=cfg.PAPER_LOG_CODE)
-    utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
-                                               exclude_subnames=['WALL', 'CLIFF'])
-
 
 # Build experiment event sequence
 seq = []
@@ -130,6 +120,16 @@ exp_seq = [
 seq.extend(exp_seq)
 exp = events.chain_events(seq, log=True, motive_client=motive)
 exp.next()
+
+# Make logfiles and set filenames
+if cfg.RAT.lower() not in ['demo']:
+    now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    filename = '{expname}_{datetime}_{RAT}_{VR_OBJECT_SIDE}_{object_name}_{person}_{log_code}'.format(
+        expname=cfg.VR_OBJECT_EXPERIMENT_NAME, datetime=now, RAT=cfg.RAT,
+        VR_OBJECT_SIDE=cfg.VR_OBJECT_SIDE, object_name=cfg.VR_OBJECT_NAME, person=cfg.EXPERIMENTER[0].upper(),
+        log_code=cfg.PAPER_LOG_CODE)
+    utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
+                                               exclude_subnames=['WALL', 'CLIFF'])
 
 # Schedule the event sequence and run the VR App!
 pyglet.clock.schedule(exp.send)

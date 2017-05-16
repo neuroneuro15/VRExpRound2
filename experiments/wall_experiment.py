@@ -72,17 +72,6 @@ app.register_vr_scene(vr_scene_without_wall)
 app.current_vr_scene = None #vr_scene_with_wall
 
 
-# Make logfiles and set filenames
-if cfg.RAT.lower() not in ['demo']:
-    now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    filename = '{expname}_{datetime}_{RAT}_{VR_WALL_X_OFFSET}_{person}_{log_code}'.format(
-        expname=cfg.VR_WALL_EXPERIMENT_NAME, datetime=now, RAT=cfg.RAT,
-        VR_WALL_X_OFFSET=cfg.VR_WALL_X_OFFSET, person=cfg.EXPERIMENTER[0].upper(),
-        log_code=cfg.PAPER_LOG_CODE)
-    utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
-                                               exclude_subnames=['OBJECT', 'CLIFF'])
-
-
 # Build experiment event sequence
 seq = []
 if not cfg.RAT.lower() in ['test', 'demo']:
@@ -125,6 +114,17 @@ exp_seq = [
 seq.extend(exp_seq)
 exp = events.chain_events(seq, log=True, motive_client=motive)
 exp.next()
+
+
+# Make logfiles and set filenames
+if cfg.RAT.lower() not in ['demo']:
+    now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    filename = '{expname}_{datetime}_{RAT}_{VR_WALL_X_OFFSET}_{person}_{log_code}'.format(
+        expname=cfg.VR_WALL_EXPERIMENT_NAME, datetime=now, RAT=cfg.RAT,
+        VR_WALL_X_OFFSET=cfg.VR_WALL_X_OFFSET, person=cfg.EXPERIMENTER[0].upper(),
+        log_code=cfg.PAPER_LOG_CODE)
+    utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
+                                               exclude_subnames=['OBJECT', 'CLIFF'])
 
 
 # Schedule the event sequence and run the VR App!
