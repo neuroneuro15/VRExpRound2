@@ -64,7 +64,7 @@ vr_scene_with_object = rc.Scene(meshes=[vr_arena, vr_object], name="Arena with O
 
 # Configure Ratcave App and register the virtual Scenes.
 app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_FILENAME,
-                 fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN)
+                 fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN, antialiasing=cfg.ANTIALIASING)
 app.set_mouse_visible(cfg.MOUSE_CURSOR_VISIBLE)
 app.arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 

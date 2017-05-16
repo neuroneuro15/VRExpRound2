@@ -4,11 +4,12 @@ EXPERIMENTER = ['Nicholas A. Del Grosso', 'Eduardo Blanco-Hernandez']
 ARENA_FILENAME = './assets/arena3uv.obj'
 ARENA_LIGHTING_DIFFUSE = 1., 1., 1.
 ARENA_LIGHTING_SPECULAR = 0., 0., 0.
-ARENA_LIGHTING_TEXTURE = './assets/uvgrid_bw.png'
+ARENA_LIGHTING_TEXTURE = './assets/uvgrid_bw2.png'
 ARENA_LIGHTING_FLAT_SHADING = True
 PROJECTOR_FILENAME = './calibration/p2.pickle'
 SCREEN = 1
 FULLSCREEN = True
+ANTIALIASING = True
 MOUSE_CURSOR_VISIBLE = False
 PAPER_LOG_CODE = ''
 

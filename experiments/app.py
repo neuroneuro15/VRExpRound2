@@ -19,7 +19,7 @@ if not motive.rigid_bodies['Arena'].position:
 
 class RatcaveApp(pyglet.window.Window):
 
-    def __init__(self, arena_objfile, projector_file, fullscreen=True, screen=1, vsync=False, *args, **kwargs):
+    def __init__(self, arena_objfile, projector_file, fullscreen=True, screen=1, antialiasing=True, vsync=False, *args, **kwargs):
         """
         A Pyglet Window that sets up the arena, beamer, and virtual scenes, along with motive update and draw functions
         for updating and rendering a virtual reality environment in a ratCAVE setup.
@@ -42,6 +42,12 @@ class RatcaveApp(pyglet.window.Window):
 
         self.rat_rb = motive.rigid_bodies['Rat']
 
+        self.antialiasing = antialiasing
+        self.fbo_aa = rc.FBO(rc.Texture(width=4096, height=4096, mipmap=True))
+        self.aa_quad = rc.gen_fullscreen_quad()
+        self.aa_quad.texture = self.fbo_aa.texture
+        self.shader_deferred = rc.Shader.from_file(*rc.resources.deferredShader)
+
         pyglet.clock.schedule(self.update)
 
     def on_draw(self):
@@ -50,7 +56,14 @@ class RatcaveApp(pyglet.window.Window):
             if self.current_vr_scene:
                 with self.cube_fbo as fbo:
                     self.current_vr_scene.draw360_to_texture(fbo.texture)
-            self.active_scene.draw()
+            if self.antialiasing:
+                with self.fbo_aa:
+                    self.active_scene.draw()
+            else:
+                self.active_scene.draw()
+        if self.antialiasing:
+            with self.shader_deferred:
+                self.aa_quad.draw()
 
     def update(self, dt):
         """Update arena position and vr_scene's camera to match motive's Arena and Rat rigid bodies."""
