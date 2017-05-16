@@ -6,8 +6,12 @@ import cfg
 import pyglet
 import events
 import subprocess
+import logging
 
-subprocess.Popen(['holdtimer'])
+# subprocess.Popen(['holdtimer'])
+
+logging.basicConfig(filename='vr_exp2.log', level=logging.INFO,
+                    format='%(asctime)s, %(message)s')
 
 vr_arena = rc.WavefrontReader(cfg.ARENA_FILENAME).get_mesh('Arena')
 vr_arena.texture = cfg.ARENA_LIGHTING_TEXTURE
@@ -27,13 +31,14 @@ vr_wall.uniforms['ambient'] = cfg.VR_WALL_LIGHTING_AMBIENT
 vr_wall.uniforms['flat_shading'] = cfg.VR_WALL_LIGHTING_FLAT_SHADING
 vr_wall.texture = cfg.VR_WALL_LIGHTING_TEXTURE
 
-vr_scene_with_wall = rc.Scene(meshes=[vr_arena, vr_wall])
-vr_scene_without_wall = rc.Scene(meshes=[vr_arena])
+vr_scene_with_wall = rc.Scene(meshes=[vr_arena, vr_wall], name="Arena without Wall")
+vr_scene_without_wall = rc.Scene(meshes=[vr_arena], name="Arena with Wall")
 
 app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_FILENAME,
                  fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN)
 app.set_mouse_visible(cfg.MOUSE_CURSOR_VISIBLE)
 app.arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
+
 app.register_vr_scene(vr_scene_with_wall)
 app.register_vr_scene(vr_scene_without_wall)
 
@@ -59,7 +64,9 @@ seq = [
     events.wait_duration(cfg.VR_OBJECT_PHASE_4_DURATION_SECS)
 ]
 
-exp = events.chain_events(seq, log=True)
+
+
+exp = events.chain_events(seq, log=True, motive_client=motive)
 exp.next()
 
 def update_phase(dt):
