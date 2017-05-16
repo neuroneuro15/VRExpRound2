@@ -30,8 +30,10 @@ conditions = {'RAT': cfg.RAT, 'VR_WALL_X_OFFSET': cfg.VR_WALL_X_OFFSET,
 dlg = DlgFromDict(conditions, title='Virtual Wall Experiment')
 if dlg.OK:
     log_code = dlg.dictionary['PAPER_LOG_CODE']
-    if len(log_code) != 7 or log_code[3] != '-':
-        raise ValueError("Invalid PAPER_LOG_CODE.  Please try again.")
+    if not 'test' in dlg.dictionary['RAT'].lower():
+        if len(log_code) != 7 or log_code[3] != '-':
+            raise ValueError("Invalid PAPER_LOG_CODE.  Please try again.")
+        subprocess.Popen(['holdtimer'])  # Launch the timer program
 
     dlg.dictionary['EXPERIMENT'] = 'wall'
     cfg.__dict__.update(dlg.dictionary)
@@ -43,20 +45,22 @@ else:
 vr_lighting = {
     'diffuse': cfg.VR_WALL_LIGHTING_DIFFUSE,
     'specular': cfg.VR_WALL_LIGHTING_SPECULAR,
-    'ambient': cfg.VR_WALL_LIGHTING_AMBIENT
-    'flat_shading': cfg.VR_WALL_LIGHTING_FLAT_SHADING
+    'ambient': cfg.VR_WALL_LIGHTING_AMBIENT,
+    'flat_shading': cfg.VR_WALL_LIGHTING_FLAT_SHADING,
 }
 
 vr_arena = rc.WavefrontReader(cfg.ARENA_FILENAME).get_mesh('Arena')
 vr_arena.texture = cfg.ARENA_LIGHTING_TEXTURE
-vr_arena.uniforms.update(vr_lighting)
+for key, value in vr_lighting.iteritems():
+    vr_arena.uniforms[key] = value #.update(vr_lighting)
 
 vr_wall = rc.WavefrontReader(rc.resources.obj_primitives).get_mesh('Plane')
 vr_wall.arrays[2][:] /= 1.7
 vr_wall.scale.x = cfg.VR_WALL_SCALE
 vr_wall.position.xyz = cfg.VR_WALL_X_OFFSET, cfg.VR_WALL_Y_OFFSET, 0
 vr_wall.rotation.y = cfg.VR_WALL_Y_ROTATION
-vr_wall.uniforms.update(vr_lighting)
+for key, value in vr_lighting.iteritems():
+    vr_wall.uniforms[key] = value
 vr_wall.texture = cfg.VR_WALL_LIGHTING_TEXTURE
 
 vr_scene_with_wall = rc.Scene(meshes=[vr_arena, vr_wall], name="Arena without Wall")
@@ -138,8 +142,7 @@ def update_phase(dt):
 pyglet.clock.schedule(update_phase)
 
 
-# Launch the timer program
-subprocess.Popen(['holdtimer'])
+
 
 
 # Run the VR App!
