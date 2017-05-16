@@ -47,11 +47,8 @@ vr_arena.texture = cfg.ARENA_LIGHTING_TEXTURE
 for key, value in vr_lighting.iteritems():
     vr_arena.uniforms[key] = value #.update(vr_lighting)
 
-vr_wall = rc.WavefrontReader(rc.resources.obj_primitives).get_mesh('Plane')
-vr_wall.arrays[2][:] /= 1.7
-vr_wall.scale.x = cfg.VR_WALL_SCALE
-vr_wall.position.xyz = cfg.VR_WALL_X_OFFSET, cfg.VR_WALL_Y_OFFSET, 0
-vr_wall.rotation.y = cfg.VR_WALL_Y_ROTATION
+vr_wall = rc.WavefrontReader(cfg.VR_WALL_FILENAME).get_mesh(cfg.VR_WALL_MESHNAME)
+vr_wall.position.xyz = cfg.VR_WALL_X_OFFSET, cfg.VR_WALL_Y_OFFSET, 0.
 for key, value in vr_lighting.iteritems():
     vr_wall.uniforms[key] = value
 vr_wall.texture = cfg.VR_WALL_LIGHTING_TEXTURE

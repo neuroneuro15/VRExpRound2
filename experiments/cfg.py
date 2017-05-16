@@ -1,7 +1,7 @@
 RAT = ['Demo', 'Test', 'VR-1A', 'VR-1B', 'VR-2A', 'VR-2B', 'VR-3A', 'VR-3B', 'VR-4A', 'VR-4B', 'VR-5A', 'VR-5B']
 EXPERIMENTER = ['Nicholas A. Del Grosso', 'Eduardo Blanco-Hernandez']
 # General settings
-ARENA_FILENAME = './assets/arena3uv.obj'
+ARENA_FILENAME = './assets/arena3uv2.obj'
 ARENA_LIGHTING_DIFFUSE = 1., 1., 1.
 ARENA_LIGHTING_SPECULAR = 0., 0., 0.
 ARENA_LIGHTING_TEXTURE = './assets/uvgrid_bw2.png'
@@ -23,11 +23,11 @@ CLIFF_OBJECT_REAL = 'RealArena'
 
 # Wall experiment settings
 VR_WALL_EXPERIMENT_NAME = 'VRWallExp'
+VR_WALL_FILENAME = './assets/vr_wall.obj'
+VR_WALL_MESHNAME = 'VR_Wall'
 VR_WALL_VISIBLE = True
 VR_WALL_X_OFFSET = [-.3, -.1, .1, .3]
-VR_WALL_Y_OFFSET = .28
-VR_WALL_SCALE = .6
-VR_WALL_Y_ROTATION = 98.
+VR_WALL_Y_OFFSET = 0.067
 VR_WALL_LIGHTING_DIFFUSE = 1., 1., 1.
 VR_WALL_LIGHTING_SPECULAR = 0., 0., 0.
 VR_WALL_LIGHTING_AMBIENT = 0., 0., 0.  #1., 1., 1.
