@@ -10,22 +10,28 @@ import logging
 from psychopy.gui import DlgFromDict
 import sys
 from datetime import datetime
-
+import json
 # subprocess.Popen(['holdtimer'])
 
-conditions = {'rat': cfg.rats, 'wall_offset': cfg.VR_WALL_X_OFFSETS}
+conditions = {'RAT': cfg.RAT, 'VR_WALL_X_OFFSET': cfg.VR_WALL_X_OFFSET}
 
 dlg = DlgFromDict(conditions, title='Virtual Wall Experiment')
 if dlg.OK:
-    conditions = dlg.dictionary
+    dlg.dictionary['EXPERIMENT'] = 'wall'
+    cfg.__dict__.update(dlg.dictionary)
 else:
     sys.exit()
 
 now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-filename = '{expname}_{datetime}_{rat}_{wall_offset}'.format(
-    expname='VRWallExp', datetime=now, rat=conditions['rat'], wall_offset=conditions['wall_offset'])
+filename = '{expname}_{datetime}_{RAT}_{VR_WALL_X_OFFSET}'.format(
+    expname='VRWallExp', datetime=now, RAT=cfg.RAT, VR_WALL_X_OFFSET=cfg.VR_WALL_X_OFFSET)
 
-logging.basicConfig(filename='logs/' + filename + '.log',
+filename_settings = 'logs/settings_logs/' + filename + '.json'
+with open(filename_settings, 'w') as f:
+    json.dump({var: cfg.__dict__[var] for var in dir(cfg) if not '_' in var[0] and not 'OBJECT' in var and not 'CLIFF' in var}, f, sort_keys=True, indent=4)
+
+filename_log = 'logs/event_logs/' + filename + '.csv'
+logging.basicConfig(filename=filename_log,
                     level=logging.INFO, format='%(asctime)s, %(message)s')
 
 motive.set_take_file_name(file_name=filename)
@@ -40,7 +46,7 @@ vr_arena.uniforms['ambient'] = cfg.VR_WALL_LIGHTING_AMBIENT
 vr_wall = rc.WavefrontReader(rc.resources.obj_primitives).get_mesh('Plane')
 vr_wall.arrays[2][:] /= 1.7
 vr_wall.scale.x = cfg.VR_WALL_SCALE
-vr_wall.position.xyz = conditions['wall_offset'], cfg.VR_WALL_Y_OFFSET, 0
+vr_wall.position.xyz = cfg.VR_WALL_X_OFFSET, cfg.VR_WALL_Y_OFFSET, 0
 vr_wall.rotation.y = cfg.VR_WALL_Y_ROTATION
 vr_wall.uniforms['diffuse'] = cfg.VR_WALL_LIGHTING_DIFFUSE
 vr_wall.uniforms['specular'] = cfg.VR_WALL_LIGHTING_SPECULAR
@@ -62,7 +68,7 @@ app.register_vr_scene(vr_scene_without_wall)
 app.current_vr_scene = None #vr_scene_with_wall
 
 seq = []
-if not 'test' in conditions['rat'].lower():
+if not 'test' in cfg.RAT.lower():
     motive_seq = [
         events.change_scene_background_color(scene=app.active_scene, color=(0., 0., 1.)),
         events.wait_for_recording(motive_client=motive),

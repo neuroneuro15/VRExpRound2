@@ -1,8 +1,7 @@
-import itertools as it
+# import itertools as it
 
-experiments = ['cliff', 'wall', 'object_exploration']
-rats = ['Test'] + ['VR-{}{}'.format(cage, num) for cage, num in it.product(range(1, 6), 'AB')]
-
+EXPERIMENT = ['cliff', 'wall', 'object_exploration']
+RAT = ['Test', 'VR-1A', 'VR-1B', 'VR-2A', 'VR-2B', 'VR-3A', 'VR-3B', 'VR-4A', 'VR-4B', 'VR-5A', 'VR-5B']
 # General settings
 ARENA_FILENAME = './assets/arena3uv.obj'
 ARENA_LIGHTING_DIFFUSE = 1., 1., 1.
@@ -26,10 +25,9 @@ CLIFF_OBJECT_REAL = 'RealArena'
 
 # Wall experiment settings
 VR_WALL_VISIBLE = True
-VR_WALL_X_OFFSETS = [-.2, -.05, .05, .2]
-VR_WALL_X_OFFSET = .0
+VR_WALL_X_OFFSET = [-.3, -.1, .1, .3]
 VR_WALL_Y_OFFSET = .28
-VR_WALL_SCALE = .5
+VR_WALL_SCALE = .6
 VR_WALL_Y_ROTATION = 98.
 VR_WALL_LIGHTING_DIFFUSE = 1., 1., 1.
 VR_WALL_LIGHTING_SPECULAR = 0., 0., 0.
@@ -42,10 +40,10 @@ VR_WALL_PHASE_3_DURATION_SECS = 50000. #60 * 4
 VR_WALL_PHASE_4_DURATION_SECS = 10. #60 * 4
 
 # Object experiment settings
-CIRCLE_SCALE = .07
-POSITION_L = .230, -0.133, -.06
-POSITION_R = -.195, -.13, .015#-.205, -.14, .015
-VR_OBJECTS_FILENAME = './assets/Eng_AllObjs1.obj'
+VR_OBJECT_CIRCLE_SCALE = .07
+VR_OBJECT_POSITION_L = .230, -0.133, -.06
+VR_OBJECT_POSITION_R = -.195, -.13, .015#-.205, -.14, .015
+VR_OBJECT_FILENAME = './assets/Eng_AllObjs1.obj'
 VR_OBJECT_VISIBLE = True
 VR_OBJECT_NAMES = ['Snake', 'Torus', 'Monkey', 'Masher', 'Moon', 'Pyramid', 'Mine']
 VR_OBJECT_NAME = 'Torus'
