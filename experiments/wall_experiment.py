@@ -22,7 +22,7 @@ conditions = {'RAT': cfg.RAT,
 dlg = DlgFromDict(conditions, title='{} Experiment Settings'.format(cfg.VR_WALL_EXPERIMENT_NAME))
 if dlg.OK:
     log_code = dlg.dictionary['PAPER_LOG_CODE']
-    if not 'test' in dlg.dictionary['RAT'].lower():
+    if not dlg.dictionary['RAT'].lower() in ['test', 'demo']:
         if len(log_code) != 7 or log_code[3] != '-':
             raise ValueError("Invalid PAPER_LOG_CODE.  Please try again.")
         dlg.dictionary['PAPER_LOG_CODE'] = log_code.upper()
@@ -84,7 +84,7 @@ utils.create_and_configure_experiment_logs(filename=filename, motive_client=moti
 
 # Build experiment event sequence
 seq = []
-if not 'test' in cfg.RAT.lower():
+if not cfg.RAT.lower() in ['test', 'demo']:
     motive_seq = [
         events.change_scene_background_color(scene=app.active_scene, color=(0., 0., 1.)),
         events.wait_for_recording(motive_client=motive),
@@ -94,10 +94,15 @@ if not 'test' in cfg.RAT.lower():
         events.change_scene_background_color(scene=app.active_scene, color=(1., 0., 0.)),
     ]
     seq.extend(motive_seq)
-else:
+elif cfg.RAT.lower() in 'test':
     cfg.VR_WALL_PHASE_1_DURATION_SECS = 1.
     cfg.VR_WALL_PHASE_2_DURATION_SECS = 1.
     cfg.VR_WALL_PHASE_3_DURATION_SECS = 5.
+    cfg.VR_WALL_PHASE_4_DURATION_SECS = 1.
+else:
+    cfg.VR_WALL_PHASE_1_DURATION_SECS = 1.
+    cfg.VR_WALL_PHASE_2_DURATION_SECS = 1.
+    cfg.VR_WALL_PHASE_3_DURATION_SECS = 50000.
     cfg.VR_WALL_PHASE_4_DURATION_SECS = 1.
 
 exp_seq = [
