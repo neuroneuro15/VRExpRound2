@@ -41,7 +41,7 @@ else:
 # Create Virtual Scenes
 vr_arena = rc.WavefrontReader(cfg.ARENA_FILENAME).get_mesh('Arena')
 vr_arena.texture = cfg.ARENA_LIGHTING_TEXTURE
-vr_arena.uniforms['diffuse'] = cfg.ARENA_LIGHTING_DIFFUSE
+vr_arena.uniforms['diffuse'] = cfg.VR_OBJECT_VRARENA_LIGHTING_DIFFUSE
 vr_arena.uniforms['specular'] = cfg.ARENA_LIGHTING_SPECULAR
 vr_arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 
@@ -49,6 +49,7 @@ vr_object = rc.WavefrontReader(cfg.VR_OBJECT_FILENAME).get_mesh(cfg.VR_OBJECT_NA
 vr_object.position.xyz = cfg.VR_OBJECT_POSITION_L if 'l' in cfg.VR_OBJECT_SIDE.lower() else cfg.VR_OBJECT_POSITION_R
 vr_object.uniforms['diffuse'] = cfg.VR_OBJECT_LIGHTING_DIFFUSE
 vr_object.uniforms['specular'] = cfg.VR_OBJECT_LIGHTING_SPECULAR
+vr_object.uniforms['spec_weight'] = cfg.VR_OBJECT_LIGHTING_SPEC_WEIGHT
 vr_object.uniforms['ambient'] = cfg.VR_OBJECT_LIGHTING_AMBIENT
 vr_object.uniforms['flat_shading'] = cfg.VR_OBJECT_LIGHTING_FLAT_SHADING
 if 'real' in cfg.VR_OBJECT_TYPE.lower():
