@@ -2,6 +2,7 @@
 
 EXPERIMENT = ['cliff', 'wall', 'object_exploration']
 RAT = ['Test', 'VR-1A', 'VR-1B', 'VR-2A', 'VR-2B', 'VR-3A', 'VR-3B', 'VR-4A', 'VR-4B', 'VR-5A', 'VR-5B']
+EXPERIMENTER = ['Nicholas A. Del Grosso', 'Eduardo Blanco-Hernandez']
 # General settings
 ARENA_FILENAME = './assets/arena3uv.obj'
 ARENA_LIGHTING_DIFFUSE = 1., 1., 1.
@@ -12,8 +13,7 @@ PROJECTOR_FILENAME = './calibration/p2.pickle'
 SCREEN = 1
 FULLSCREEN = True
 MOUSE_CURSOR_VISIBLE = False
-ARDUINO_PORT = 'COM1'
-
+PAPER_LOG_CODE = ''
 
 # Cliff experiment settings
 CLIFF_FILENAME = './assets/viscliff3b.obj'
@@ -40,6 +40,7 @@ VR_WALL_PHASE_3_DURATION_SECS = 240.
 VR_WALL_PHASE_4_DURATION_SECS = 240.
 
 # Object experiment settings
+VR_OBJECT_ARDUINO_PORT = 'COM1'
 VR_OBJECT_CIRCLE_SCALE = .07
 VR_OBJECT_POSITION_L = .230, -0.133, -.06
 VR_OBJECT_POSITION_R = -.195, -.13, .015#-.205, -.14, .015

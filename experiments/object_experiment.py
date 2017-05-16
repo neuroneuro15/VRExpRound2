@@ -53,7 +53,7 @@ app.register_vr_scene(vr_scene_without_object)
 
 app.current_vr_scene = None
 
-robo_arm = Serial(cfg.ARDUINO_PORT, timeout=0.5)
+robo_arm = Serial(cfg.VR_OBJECT_ARDUINO_PORT, timeout=0.5)
 
 seq = [
     events.wait_duration(cfg.VR_OBJECT_PHASE_1_DURATION_SECS),

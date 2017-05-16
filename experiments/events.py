@@ -57,7 +57,7 @@ def chain_events(events, log=True, motive_client=None):
             args = {var: event.gi_frame.f_locals[var]  for var in event.gi_code.co_varnames[:event.gi_code.co_argcount]}
             print(event_data, args)
 
-            logging.warn('{mot_time}, {fun_name}, {args}'.format(mot_time=motive_client.timestamp_recording, fun_name=event.__name__,
+            logging.warn('{mot_time}; {fun_name}; {args}'.format(mot_time=motive_client.timestamp_recording, fun_name=event.__name__,
                                                                    args=args))
         return event
 
