@@ -26,7 +26,7 @@ CLIFF_OBJECT_REAL = 'RealArena'
 
 # Wall experiment settings
 VR_WALL_VISIBLE = True
-# VR_WALL_X_OFFSETS = [-.2, -.05, .05, .2]
+VR_WALL_X_OFFSETS = [-.2, -.05, .05, .2]
 VR_WALL_X_OFFSET = .0
 VR_WALL_Y_OFFSET = .28
 VR_WALL_SCALE = .5

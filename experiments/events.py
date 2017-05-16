@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import logging
 from collections import deque
+from numpy import array, linalg
 
 def fade_to_black(mesh, speed=1.):
     vel = -speed
@@ -31,6 +32,21 @@ def send_robo_command(device, msg):
     dt = yield
     device.write(msg)
 
+def wait_for_recording(motive_client):
+    while not motive_client.is_recording:
+        dt = yield
+
+def wait_for_distance_exceeded(rb1, rb2, distance):
+    while linalg.norm(array(rb1.position) - array(rb2.position)) < distance:
+        dt = yield
+
+def wait_for_distance_under(rb1, rb2, distance):
+    while linalg.norm(array(rb1.position) - array(rb2.position)) > distance:
+        dt = yield
+
+def change_scene_background_color(scene, color):
+    dt = yield
+    scene.bgColor = color
 
 def chain_events(events, log=True, motive_client=None):
     def init_next_event():

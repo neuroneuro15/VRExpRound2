@@ -7,11 +7,28 @@ import pyglet
 import events
 import subprocess
 import logging
+from psychopy.gui import DlgFromDict
+import sys
+from datetime import datetime
 
 # subprocess.Popen(['holdtimer'])
 
-logging.basicConfig(filename='vr_exp2.log', level=logging.INFO,
-                    format='%(asctime)s, %(message)s')
+conditions = {'rat': cfg.rats, 'wall_offset': cfg.VR_WALL_X_OFFSETS}
+
+dlg = DlgFromDict(conditions, title='Virtual Wall Experiment')
+if dlg.OK:
+    conditions = dlg.dictionary
+else:
+    sys.exit()
+
+now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+filename = '{expname}_{datetime}_{rat}_{wall_offset}'.format(
+    expname='VRWallExp', datetime=now, rat=conditions['rat'], wall_offset=conditions['wall_offset'])
+
+logging.basicConfig(filename='logs/' + filename + '.log',
+                    level=logging.INFO, format='%(asctime)s, %(message)s')
+
+motive.set_take_file_name(file_name=filename)
 
 vr_arena = rc.WavefrontReader(cfg.ARENA_FILENAME).get_mesh('Arena')
 vr_arena.texture = cfg.ARENA_LIGHTING_TEXTURE
@@ -23,7 +40,7 @@ vr_arena.uniforms['ambient'] = cfg.VR_WALL_LIGHTING_AMBIENT
 vr_wall = rc.WavefrontReader(rc.resources.obj_primitives).get_mesh('Plane')
 vr_wall.arrays[2][:] /= 1.7
 vr_wall.scale.x = cfg.VR_WALL_SCALE
-vr_wall.position.xyz = cfg.VR_WALL_X_OFFSET, cfg.VR_WALL_Y_OFFSET, 0
+vr_wall.position.xyz = conditions['wall_offset'], cfg.VR_WALL_Y_OFFSET, 0
 vr_wall.rotation.y = cfg.VR_WALL_Y_ROTATION
 vr_wall.uniforms['diffuse'] = cfg.VR_WALL_LIGHTING_DIFFUSE
 vr_wall.uniforms['specular'] = cfg.VR_WALL_LIGHTING_SPECULAR
@@ -44,8 +61,20 @@ app.register_vr_scene(vr_scene_without_wall)
 
 app.current_vr_scene = None #vr_scene_with_wall
 
+seq = []
+if not 'test' in conditions['rat'].lower():
+    motive_seq = [
+        events.change_scene_background_color(scene=app.active_scene, color=(0., 0., 1.)),
+        events.wait_for_recording(motive_client=motive),
+        events.change_scene_background_color(scene=app.active_scene, color=(0., 1., 0.)),
+        events.wait_for_distance_under(rb1=app.arena_rb, rb2=motive.rigid_bodies['TransportBox'], distance=0.5),
+        events.wait_for_distance_exceeded(rb1=app.rat_rb, rb2=motive.rigid_bodies['TransportBox'], distance=0.4),
+        events.change_scene_background_color(scene=app.active_scene, color=(1., 0., 0.)),
+    ]
+    seq.extend(motive_seq)
 
-seq = [
+
+exp_seq = [
     events.wait_duration(cfg.VR_OBJECT_PHASE_1_DURATION_SECS),
     events.fade_to_black(app.arena),
     events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
@@ -63,6 +92,7 @@ seq = [
     events.fade_to_white(app.arena),
     events.wait_duration(cfg.VR_OBJECT_PHASE_4_DURATION_SECS)
 ]
+seq.extend(exp_seq)
 
 
 
