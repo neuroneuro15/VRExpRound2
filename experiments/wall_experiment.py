@@ -22,20 +22,6 @@ if dlg.OK:
 else:
     sys.exit()
 
-now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-filename = '{expname}_{datetime}_{RAT}_{VR_WALL_X_OFFSET}'.format(
-    expname='VRWallExp', datetime=now, RAT=cfg.RAT, VR_WALL_X_OFFSET=cfg.VR_WALL_X_OFFSET)
-
-filename_settings = 'logs/settings_logs/' + filename + '.json'
-with open(filename_settings, 'w') as f:
-    json.dump({var: cfg.__dict__[var] for var in dir(cfg) if not '_' in var[0] and not 'OBJECT' in var and not 'CLIFF' in var}, f, sort_keys=True, indent=4)
-
-filename_log = 'logs/event_logs/' + filename + '.csv'
-logging.basicConfig(filename=filename_log,
-                    level=logging.INFO, format='%(asctime)s, %(message)s')
-
-motive.set_take_file_name(file_name=filename)
-
 vr_arena = rc.WavefrontReader(cfg.ARENA_FILENAME).get_mesh('Arena')
 vr_arena.texture = cfg.ARENA_LIGHTING_TEXTURE
 vr_arena.uniforms['flat_shading'] = cfg.VR_WALL_LIGHTING_FLAT_SHADING
@@ -67,6 +53,23 @@ app.register_vr_scene(vr_scene_without_wall)
 
 app.current_vr_scene = None #vr_scene_with_wall
 
+
+# Make logfiles and set filenames
+now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+filename = '{expname}_{datetime}_{RAT}_{VR_WALL_X_OFFSET}'.format(
+    expname='VRWallExp', datetime=now, RAT=cfg.RAT, VR_WALL_X_OFFSET=cfg.VR_WALL_X_OFFSET)
+
+filename_settings = 'logs/settings_logs/' + filename + '.json'
+with open(filename_settings, 'w') as f:
+    json.dump({var: cfg.__dict__[var] for var in dir(cfg) if not '_' in var[0] and not 'OBJECT' in var and not 'CLIFF' in var}, f, sort_keys=True, indent=4)
+
+filename_log = 'logs/event_logs/' + filename + '.csv'
+logging.basicConfig(filename=filename_log,
+                    level=logging.INFO, format='%(asctime)s, %(message)s')
+
+motive.set_take_file_name(file_name=filename)
+
+# Build experiment event sequence
 seq = []
 if not 'test' in cfg.RAT.lower():
     motive_seq = [
@@ -78,25 +81,30 @@ if not 'test' in cfg.RAT.lower():
         events.change_scene_background_color(scene=app.active_scene, color=(1., 0., 0.)),
     ]
     seq.extend(motive_seq)
+else:
+    cfg.VR_WALL_PHASE_1_DURATION_SECS = 1.
+    cfg.VR_WALL_PHASE_2_DURATION_SECS = 1.
+    cfg.VR_WALL_PHASE_3_DURATION_SECS = 50000.
+
 
 
 exp_seq = [
-    events.wait_duration(cfg.VR_OBJECT_PHASE_1_DURATION_SECS),
+    events.wait_duration(cfg.VR_WALL_PHASE_1_DURATION_SECS),
     events.fade_to_black(app.arena),
     events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
     events.set_scene_to(app, vr_scene_without_wall),
     events.fade_to_white(app.arena),
-    events.wait_duration(cfg.VR_OBJECT_PHASE_2_DURATION_SECS),
+    events.wait_duration(cfg.VR_WALL_PHASE_2_DURATION_SECS),
     events.fade_to_black(app.arena),
     events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
     events.set_scene_to(app, vr_scene_with_wall),
     events.fade_to_white(app.arena),
-    events.wait_duration(cfg.VR_OBJECT_PHASE_3_DURATION_SECS),
+    events.wait_duration(cfg.VR_WALL_PHASE_3_DURATION_SECS),
     events.fade_to_black(app.arena),
     events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
     events.set_scene_to(app, vr_scene_without_wall),
     events.fade_to_white(app.arena),
-    events.wait_duration(cfg.VR_OBJECT_PHASE_4_DURATION_SECS)
+    events.wait_duration(cfg.VR_WALL_PHASE_4_DURATION_SECS)
 ]
 seq.extend(exp_seq)
 
