@@ -12,7 +12,12 @@ from psychopy.gui import DlgFromDict
 import sys
 from datetime import datetime
 import utils
+from pypixxlib import propixx
 
+projector = propixx.PROPixx()
+projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
+projector.setLampLED(cfg.PROJECTOR_LED_ON)
+projector.setLedIntensity(cfg.PROJECTOR_LED_INTENSITY)
 
 robo_arm = Serial(cfg.VR_OBJECT_ARDUINO_PORT, timeout=0.5)
 robo_arm.write('D')

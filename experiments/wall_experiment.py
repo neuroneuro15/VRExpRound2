@@ -10,6 +10,12 @@ from psychopy.gui import DlgFromDict
 import sys
 from datetime import datetime
 import utils
+from pypixxlib import propixx
+
+projector = propixx.PROPixx()
+projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
+projector.setLampLED(cfg.PROJECTOR_LED_ON)
+projector.setLedIntensity(cfg.PROJECTOR_LED_INTENSITY)
 
 
 # Show User-Defined Experiment Settings

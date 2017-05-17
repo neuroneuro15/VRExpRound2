@@ -13,6 +13,9 @@ ANTIALIASING = True
 MOUSE_CURSOR_VISIBLE = False
 PAPER_LOG_CODE = ''
 FIRST_PERSON_MODE = False
+PROJECTOR_TURNED_ON = True
+PROJECTOR_LED_ON = True
+PROJECTOR_LED_INTENSITY = "6.25"  # Requires exact string: "100.0", "50.0", "25.0", "12.5", "6.25"
 
 # Cliff experiment settings
 CLIFF_FILENAME = './assets/viscliff3b.obj'
