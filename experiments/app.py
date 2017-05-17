@@ -19,7 +19,7 @@ if not motive.rigid_bodies['Arena'].position:
 
 class RatcaveApp(pyglet.window.Window):
 
-    def __init__(self, arena_objfile, projector_file, fullscreen=True, screen=1, antialiasing=True, vsync=False, *args, **kwargs):
+    def __init__(self, arena_objfile, projector_file, fullscreen=True, screen=1, antialiasing=True, vsync=False, fps_mode=False, *args, **kwargs):
         """
         A Pyglet Window that sets up the arena, beamer, and virtual scenes, along with motive update and draw functions
         for updating and rendering a virtual reality environment in a ratCAVE setup.
@@ -47,20 +47,31 @@ class RatcaveApp(pyglet.window.Window):
         self.aa_quad = rc.gen_fullscreen_quad()
         self.aa_quad.texture = self.fbo_aa.texture
         self.shader_deferred = rc.Shader.from_file(*rc.resources.deferredShader)
+        if fps_mode:
+            raise NotImplementedError("Haven't gotten fps_mode to work properly yet.")
+        self.fps_mode = fps_mode
 
         pyglet.clock.schedule(self.update)
 
     def on_draw(self):
         """Render the virtual environment."""
-        with self.shader:
-            if self.current_vr_scene:
-                with self.cube_fbo as fbo:
-                    self.current_vr_scene.draw360_to_texture(fbo.texture)
-            if self.antialiasing:
-                with self.fbo_aa:
+        if self.fps_mode:
+            with self.shader:
+                if self.current_vr_scene:
+                    self.current_vr_scene.draw()
+                else:
                     self.active_scene.draw()
-            else:
-                self.active_scene.draw()
+        else:
+            with self.shader:
+                if self.current_vr_scene:
+                    with self.cube_fbo as fbo:
+                        self.current_vr_scene.draw360_to_texture(fbo.texture)
+                if self.antialiasing:
+                    with self.fbo_aa:
+                        self.active_scene.draw()
+                else:
+                    self.active_scene.draw()
+
         if self.antialiasing:
             with self.shader_deferred:
                 self.aa_quad.draw()
@@ -103,6 +114,7 @@ class RatcaveApp(pyglet.window.Window):
             scene.light.position.xyz = self.active_scene.light.position.xyz
 
         if make_cube_camera:
+            scene.camera.rotation = scene.camera.rotation.to_quaternion()
             scene.camera.projection.aspect = 1.
             scene.camera.projection.fov_y = 90.
             scene.camera.projection.z_near = .004
