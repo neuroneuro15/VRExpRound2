@@ -13,6 +13,7 @@ import sys
 from datetime import datetime
 import utils
 from pypixxlib import propixx
+import warnings
 
 projector = propixx.PROPixx()
 projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
@@ -20,7 +21,12 @@ projector.setLampLED(cfg.PROJECTOR_LED_ON)
 projector.setLedIntensity(cfg.PROJECTOR_LED_INTENSITY)
 
 robo_arm = Serial(cfg.VR_OBJECT_ARDUINO_PORT, timeout=0.5)
-robo_arm.write('D')
+
+# print('Current RoboArm rotation: ', motive.rigid_bodies['RoboArm'].rotation )
+if motive.rigid_bodies['RoboArm'].rotation[2] > -15:
+    warnings.warn("RoboArm seems to be raised currently. It should be lowered first.")
+    robo_arm.write('D')
+
 
 # Show User-Defined Experiment Settings
 conditions = {'RAT': cfg.RAT,
