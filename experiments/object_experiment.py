@@ -18,7 +18,7 @@ import warnings
 projector = propixx.PROPixx()
 projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
 projector.setLampLED(cfg.PROJECTOR_LED_ON)
-projector.setLedIntensity(cfg.PROJECTOR_LED_INTENSITY)
+projector.setLedIntensity(cfg.VR_OBJECT_PROJECTOR_LED_INTENSITY)
 
 robo_arm = Serial(cfg.VR_OBJECT_ARDUINO_PORT, timeout=0.5)
 

@@ -15,7 +15,7 @@ from pypixxlib import propixx
 projector = propixx.PROPixx()
 projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
 projector.setLampLED(cfg.PROJECTOR_LED_ON)
-projector.setLedIntensity(cfg.PROJECTOR_LED_INTENSITY)
+projector.setLedIntensity(cfg.VR_WALL_PROJECTOR_LED_INTENSITY)
 
 
 # Show User-Defined Experiment Settings

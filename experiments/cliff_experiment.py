@@ -8,7 +8,7 @@ from pypixxlib import propixx
 projector = propixx.PROPixx()
 projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
 projector.setLampLED(cfg.PROJECTOR_LED_ON)
-projector.setLedIntensity(cfg.PROJECTOR_LED_INTENSITY)
+projector.setLedIntensity(cfg.CLIFF_PROJECTOR_LED_INTENSITY)
 
 if not cfg.CLIFF_SIDE.lower() in 'lr':
     raise ValueError("CLIFF_SIDE must be 'L' or 'R'.")

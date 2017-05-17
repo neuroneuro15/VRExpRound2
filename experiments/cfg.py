@@ -15,7 +15,7 @@ PAPER_LOG_CODE = ''
 FIRST_PERSON_MODE = False
 PROJECTOR_TURNED_ON = True
 PROJECTOR_LED_ON = True
-PROJECTOR_LED_INTENSITY = "6.25"  # Requires exact string: "100.0", "50.0", "25.0", "12.5", "6.25"
+
 
 # Cliff experiment settings
 CLIFF_FILENAME = './assets/viscliff3b.obj'
@@ -24,6 +24,7 @@ CLIFF_SIDE = 'R' # L or R
 CLIFF_OBJECT_L = 'virArena'
 CLIFF_OBJECT_R = 'virArena2'
 CLIFF_OBJECT_REAL = 'RealArena'
+CLIFF_PROJECTOR_LED_INTENSITY = "6.25"  # Requires exact string: "100.0", "50.0", "25.0", "12.5", "6.25"
 
 # Wall experiment settings
 VR_WALL_EXPERIMENT_NAME = 'VRWallExp'
@@ -41,6 +42,9 @@ VR_WALL_PHASE_1_DURATION_SECS = 60.
 VR_WALL_PHASE_2_DURATION_SECS = 240.
 VR_WALL_PHASE_3_DURATION_SECS = 240.
 VR_WALL_PHASE_4_DURATION_SECS = 240.
+VR_WALL_PROJECTOR_LED_INTENSITY = "6.25"  # Requires exact string: "100.0", "50.0", "25.0", "12.5", "6.25"
+
+
 
 # Object experiment settings
 VR_OBJECT_EXPERIMENT_NAME = 'VRObjectExp'
@@ -69,3 +73,4 @@ VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS = 4.
 VR_OBJECT_ARDUINO_PORT = 'COM7'
 VR_OBJECT_ROBO_COMMAND_UP = b'U'
 VR_OBJECT_ROBO_COMMAND_DOWN = b'D'
+VR_OBJECT_PROJECTOR_LED_INTENSITY = "12.5"  # Requires exact string: "100.0", "50.0", "25.0", "12.5", "6.25"
