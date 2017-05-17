@@ -76,7 +76,7 @@ app.register_vr_scene(vr_scene_without_object)
 
 app.current_vr_scene = None
 
-
+meshes_to_fade = [app.arena]
 # Highlight positions of Real Objects with circles, so squares aren't drawn on them.
 circles = []
 if 'real' in cfg.VR_OBJECT_TYPE.lower():
@@ -84,7 +84,7 @@ if 'real' in cfg.VR_OBJECT_TYPE.lower():
     for position in [cfg.VR_OBJECT_POSITION_L, cfg.VR_OBJECT_POSITION_R]:
         circle = primitive_reader.get_mesh('Circle')
         circle.position.xyz = position
-        circle.position.y -= cfg.VR_OBJECT_CIRCLE_Y_OFFSET
+        circle.position.y += cfg.VR_OBJECT_CIRCLE_Y_OFFSET
         circle.rotation.x = 90
         circle.parent = app.arena
         circle.scale.x = cfg.VR_OBJECT_CIRCLE_SCALE
@@ -92,6 +92,7 @@ if 'real' in cfg.VR_OBJECT_TYPE.lower():
         circle.uniforms['diffuse'] = cfg.VR_OBJECT_VRARENA_LIGHTING_DIFFUSE
         app.active_scene.meshes.append(circle)
         circles.append(circle)
+        meshes_to_fade.append(circle)
 
 
 # Build experiment event sequence
@@ -119,21 +120,21 @@ else:
 
 exp_seq = [
     events.wait_duration(cfg.VR_OBJECT_PHASE_1_DURATION_SECS),
-    events.fade_to_black(app.arena),
+    events.fade_to_black(meshes=meshes_to_fade),
     events.set_scene_to(app, vr_scene_without_object),
-    events.fade_to_white(app.arena),
+    events.fade_to_white(meshes=meshes_to_fade),
     events.wait_duration(cfg.VR_OBJECT_PHASE_2_DURATION_SECS),
-    events.fade_to_black(app.arena),
+    events.fade_to_black(meshes=meshes_to_fade),
     events.send_robo_command(robo_arm, cfg.VR_OBJECT_ROBO_COMMAND_UP),
     events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
     events.set_scene_to(app, vr_scene_with_object),
-    events.fade_to_white(app.arena),
+    events.fade_to_white(meshes=meshes_to_fade),
     events.wait_duration(cfg.VR_OBJECT_PHASE_3_DURATION_SECS),
-    events.fade_to_black(app.arena),
+    events.fade_to_black(meshes=meshes_to_fade),
     events.send_robo_command(robo_arm, cfg.VR_OBJECT_ROBO_COMMAND_DOWN),
     events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
     events.set_scene_to(app, vr_scene_without_object),
-    events.fade_to_white(app.arena),
+    events.fade_to_white(meshes=meshes_to_fade),
     events.wait_duration(cfg.VR_OBJECT_PHASE_4_DURATION_SECS),
     events.close_app(app=app)
 ]

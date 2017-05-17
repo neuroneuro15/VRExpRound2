@@ -5,18 +5,21 @@ from collections import deque
 from numpy import array, linalg
 
 
-def fade_to_black(mesh, speed=1.):
+def fade_to_black(meshes, speed=1.):
     vel = -speed
-    while mesh.uniforms['diffuse'][0] > 0.:
+
+    while meshes[0].uniforms['diffuse'][0] > 0.:
         dt = yield
-        mesh.uniforms['diffuse'] = [dif + (vel  * dt) for dif in mesh.uniforms['diffuse']]
+        for mesh in meshes:
+            mesh.uniforms['diffuse'] = [dif + (vel  * dt) for dif in mesh.uniforms['diffuse']]
 
 
-def fade_to_white(mesh, speed=1.):
+def fade_to_white(meshes, speed=1.):
     vel = speed
-    while mesh.uniforms['diffuse'][0] <= 1.:
+    while meshes[0].uniforms['diffuse'][0] <= 1.:
         dt = yield
-        mesh.uniforms['diffuse'] = [dif + (vel  * dt) for dif in mesh.uniforms['diffuse']]
+        for mesh in meshes:
+            mesh.uniforms['diffuse'] = [dif + (vel  * dt) for dif in mesh.uniforms['diffuse']]
 
 
 def wait_duration(duration):
