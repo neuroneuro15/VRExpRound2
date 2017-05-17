@@ -113,6 +113,7 @@ exp_seq = [
     events.set_scene_to(app=app, new_scene=vr_scene_without_wall),
     events.fade_to_white(meshes=[app.arena]),
     events.wait_duration(duration=cfg.VR_WALL_PHASE_4_DURATION_SECS),
+    events.fade_to_black(meshes=[app.arena]),
     events.close_app(app=app)
 ]
 seq.extend(exp_seq)

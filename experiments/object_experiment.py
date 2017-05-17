@@ -141,6 +141,7 @@ exp_seq = [
     events.set_scene_to(app, vr_scene_without_object),
     events.fade_to_white(meshes=meshes_to_fade),
     events.wait_duration(cfg.VR_OBJECT_PHASE_4_DURATION_SECS),
+    events.fade_to_black(meshes=meshes_to_fade),
     events.close_app(app=app)
 ]
 seq.extend(exp_seq)
