@@ -59,7 +59,8 @@ vr_scene_without_wall = rc.Scene(meshes=[vr_arena], name="Arena with Wall")
 
 # Configure Ratcave App and register the virtual Scenes.
 app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_FILENAME,
-                 fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN, antialiasing=cfg.ANTIALIASING)
+                 fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN, antialiasing=cfg.ANTIALIASING,
+                 fps_mode=cfg.FIRST_PERSON_MODE)
 app.set_mouse_visible(cfg.MOUSE_CURSOR_VISIBLE)
 app.arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 # app.arena.uniforms['diffuse'] = 0., 0., 0.

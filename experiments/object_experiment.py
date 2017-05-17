@@ -15,6 +15,7 @@ import utils
 
 
 robo_arm = Serial(cfg.VR_OBJECT_ARDUINO_PORT, timeout=0.5)
+robo_arm.write('D')
 
 # Show User-Defined Experiment Settings
 conditions = {'RAT': cfg.RAT,
@@ -47,6 +48,7 @@ vr_arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 
 vr_object = rc.WavefrontReader(cfg.VR_OBJECT_FILENAME).get_mesh(cfg.VR_OBJECT_NAME, scale=cfg.VR_OBJECT_SCALE)
 vr_object.position.xyz = cfg.VR_OBJECT_POSITION_L if 'l' in cfg.VR_OBJECT_SIDE.lower() else cfg.VR_OBJECT_POSITION_R
+vr_object.position.y += cfg.VR_OBJECT_Y_OFFSET
 vr_object.uniforms['diffuse'] = cfg.VR_OBJECT_LIGHTING_DIFFUSE
 vr_object.uniforms['specular'] = cfg.VR_OBJECT_LIGHTING_SPECULAR
 vr_object.uniforms['spec_weight'] = cfg.VR_OBJECT_LIGHTING_SPEC_WEIGHT
@@ -64,7 +66,8 @@ vr_scene_with_object = rc.Scene(meshes=[vr_arena, vr_object], name="Arena with O
 
 # Configure Ratcave App and register the virtual Scenes.
 app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_FILENAME,
-                 fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN, antialiasing=cfg.ANTIALIASING)
+                 fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN, antialiasing=cfg.ANTIALIASING,
+                 fps_mode=cfg.FIRST_PERSON_MODE)
 app.set_mouse_visible(cfg.MOUSE_CURSOR_VISIBLE)
 app.arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 
