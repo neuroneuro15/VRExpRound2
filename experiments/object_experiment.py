@@ -113,8 +113,8 @@ if cfg.RAT.lower() not in ['test', 'demo']:
         events.change_scene_background_color(scene=app.active_scene, color=(0., 0., 1.)),
         events.wait_for_recording(motive_client=motive),
         events.change_scene_background_color(scene=app.active_scene, color=(0., 1., 0.)),
-        events.wait_for_distance_under(rb1=app.arena_rb, rb2=motive.rigid_bodies['TransportBox'], distance=0.5),
-        events.wait_for_distance_exceeded(rb1=app.rat_rb, rb2=motive.rigid_bodies['TransportBox'], distance=0.4),
+        # events.wait_for_distance_under(rb1=app.arena_rb, rb2=motive.rigid_bodies['TransportBox'], distance=0.5),
+        # events.wait_for_distance_exceeded(rb1=app.rat_rb, rb2=motive.rigid_bodies['TransportBox'], distance=0.4),
         events.change_scene_background_color(scene=app.active_scene, color=(1., 0., 0.)),
     ]
     seq.extend(motive_seq)
@@ -131,23 +131,23 @@ else:
 
 exp_seq = [
     events.wait_duration(cfg.VR_OBJECT_PHASE_1_DURATION_SECS),
-    events.fade_to_black(meshes=meshes_to_fade),
+    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
     events.set_scene_to(app, vr_scene_without_object),
-    events.fade_to_white(meshes=meshes_to_fade),
+    events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
     events.wait_duration(cfg.VR_OBJECT_PHASE_2_DURATION_SECS),
-    events.fade_to_black(meshes=meshes_to_fade),
+    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
     events.send_robo_command(robo_arm, cfg.VR_OBJECT_ROBO_COMMAND_UP),
     events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
     events.set_scene_to(app, vr_scene_with_object),
-    events.fade_to_white(meshes=meshes_to_fade),
+    events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
     events.wait_duration(cfg.VR_OBJECT_PHASE_3_DURATION_SECS),
-    events.fade_to_black(meshes=meshes_to_fade),
+    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
     events.send_robo_command(robo_arm, cfg.VR_OBJECT_ROBO_COMMAND_DOWN),
     events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
     events.set_scene_to(app, vr_scene_without_object),
-    events.fade_to_white(meshes=meshes_to_fade),
+    events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
     events.wait_duration(cfg.VR_OBJECT_PHASE_4_DURATION_SECS),
-    events.fade_to_black(meshes=meshes_to_fade),
+    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
     events.close_app(app=app)
 ]
 seq.extend(exp_seq)

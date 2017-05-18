@@ -83,8 +83,8 @@ if not cfg.RAT.lower() in ['test', 'demo']:
         events.change_scene_background_color(scene=app.active_scene, color=(0., 0., 1.)),
         events.wait_for_recording(motive_client=motive),
         events.change_scene_background_color(scene=app.active_scene, color=(0., 1., 0.)),
-        events.wait_for_distance_under(rb1=app.arena_rb, rb2=motive.rigid_bodies['TransportBox'], distance=0.5),
-        events.wait_for_distance_exceeded(rb1=app.rat_rb, rb2=motive.rigid_bodies['TransportBox'], distance=0.4),
+        # events.wait_for_distance_under(rb1=app.arena_rb, rb2=motive.rigid_bodies['TransportBox'], distance=0.5),
+        # events.wait_for_distance_exceeded(rb1=app.rat_rb, rb2=motive.rigid_bodies['TransportBox'], distance=0.4),
         events.change_scene_background_color(scene=app.active_scene, color=(1., 0., 0.)),
     ]
     seq.extend(motive_seq)
@@ -101,19 +101,19 @@ else:
 
 exp_seq = [
     events.wait_duration(duration=cfg.VR_WALL_PHASE_1_DURATION_SECS),
-    events.fade_to_black(meshes=[app.arena]),
+    events.fade_to_black(meshes=[app.arena], speed=cfg.VR_WALL_FADE_SPEED),
     events.set_scene_to(app=app, new_scene=vr_scene_without_wall),
-    events.fade_to_white(meshes=[app.arena]),
+    events.fade_to_white(meshes=[app.arena], speed=cfg.VR_WALL_FADE_SPEED),
     events.wait_duration(duration=cfg.VR_WALL_PHASE_2_DURATION_SECS),
-    events.fade_to_black(meshes=[app.arena]),
+    events.fade_to_black(meshes=[app.arena], speed=cfg.VR_WALL_FADE_SPEED),
     events.set_scene_to(app=app, new_scene=vr_scene_with_wall),
-    events.fade_to_white(meshes=[app.arena]),
+    events.fade_to_white(meshes=[app.arena], speed=cfg.VR_WALL_FADE_SPEED),
     events.wait_duration(duration=cfg.VR_WALL_PHASE_3_DURATION_SECS),
-    events.fade_to_black(meshes=[app.arena]),
+    events.fade_to_black(meshes=[app.arena], speed=cfg.VR_WALL_FADE_SPEED),
     events.set_scene_to(app=app, new_scene=vr_scene_without_wall),
-    events.fade_to_white(meshes=[app.arena]),
+    events.fade_to_white(meshes=[app.arena], speed=cfg.VR_WALL_FADE_SPEED),
     events.wait_duration(duration=cfg.VR_WALL_PHASE_4_DURATION_SECS),
-    events.fade_to_black(meshes=[app.arena]),
+    events.fade_to_black(meshes=[app.arena], speed=cfg.VR_WALL_FADE_SPEED),
     events.close_app(app=app)
 ]
 seq.extend(exp_seq)
