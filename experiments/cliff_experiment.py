@@ -3,13 +3,36 @@ from __future__ import print_function
 from app import RatcaveApp, motive
 import cfg
 import ratcave as rc
+from psychopy.gui import DlgFromDict
 from pypixxlib import propixx
 import pyglet
+import sys
 
 projector = propixx.PROPixx()
 projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
 projector.setLampLED(cfg.PROJECTOR_LED_ON)
 projector.setLedIntensity(cfg.CLIFF_PROJECTOR_LED_INTENSITY)
+
+# Show User-Defined Experiment Settings
+conditions = {'RAT': cfg.RAT,
+              'EXPERIMENTER': cfg.EXPERIMENTER,
+              'PAPER_LOG_CODE': cfg.PAPER_LOG_CODE,
+              'CLIFF_TYPE': cfg.CLIFF_TYPE,
+              'CLIFF_SIDE': cfg.CLIFF_SIDE,
+              }
+
+dlg = DlgFromDict(conditions, title='{} Experiment Settings'.format(cfg.CLIFF_EXPERIMENT_NAME))
+if dlg.OK:
+    log_code = dlg.dictionary['PAPER_LOG_CODE']
+    if not dlg.dictionary['RAT'].lower() in ['test', 'demo']:
+        if len(log_code) != 7 or log_code[3] != '-':
+            raise ValueError("Invalid PAPER_LOG_CODE.  Please try again.")
+        dlg.dictionary['PAPER_LOG_CODE'] = log_code.upper()
+
+    dlg.dictionary['EXPERIMENT'] = cfg.CLIFF_EXPERIMENT_NAME
+    cfg.__dict__.update(dlg.dictionary)
+else:
+    sys.exit()
 
 
 # Set up VR Scenes

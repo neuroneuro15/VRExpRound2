@@ -18,11 +18,12 @@ PROJECTOR_LED_ON = True
 
 
 # Cliff experiment settings
+CLIFF_EXPERIMENT_NAME = 'VRCliffExp'
 CLIFF_FILENAME = './assets/viscliff4.obj'
 CLIFF_ARENA_LIGHTING_TEXTURE = './assets/uvgrid_bw2_cliffvers.png'
 CLIFF_REALARENA_LIGHTING_DIFFUSE = (1.5,) * 3
-CLIFF_TYPE = 'Real'  # Real, or VR, or Static
-CLIFF_SIDE = 'L' # L or R
+CLIFF_TYPE = ['VR', 'Static', 'Real']
+CLIFF_SIDE = ['L', 'R']
 CLIFF_OBJECT_L = 'virArena'
 CLIFF_OBJECT_R = 'virArena2'
 CLIFF_OBJECT_REAL = 'RealArena'
