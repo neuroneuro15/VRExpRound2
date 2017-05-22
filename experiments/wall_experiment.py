@@ -117,8 +117,6 @@ exp_seq = [
     events.close_app(app=app)
 ]
 seq.extend(exp_seq)
-exp = events.chain_events(seq, log=True, motive_client=motive)
-exp.next()
 
 
 # Make logfiles and set filenames
@@ -131,6 +129,9 @@ if cfg.RAT.lower() not in ['demo']:
     utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
                                                exclude_subnames=['OBJECT', 'CLIFF'])
 
+
+exp = events.chain_events(seq, log=True, motive_client=motive)
+exp.next()
 
 # Schedule the event sequence and run the VR App!
 pyglet.clock.schedule(exp.send)
