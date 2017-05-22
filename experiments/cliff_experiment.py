@@ -4,6 +4,7 @@ from app import RatcaveApp, motive
 import cfg
 import ratcave as rc
 from pypixxlib import propixx
+import pyglet
 
 projector = propixx.PROPixx()
 projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
@@ -38,5 +39,14 @@ app.arena.uniforms['diffuse'] = cfg.ARENA_LIGHTING_DIFFUSE
 app.arena.uniforms['specular'] = cfg.ARENA_LIGHTING_SPECULAR
 
 app.register_vr_scene(vr_scene)
+
+if 'static' in cfg.CLIFF_TYPE.lower():
+    print('setting to static mode...')
+    pyglet.clock.unschedule(app.update)
+    app.update(.016)
+    app.current_vr_scene.camera.position.xyz = app.arena.position.xyz
+    app.current_vr_scene.camera.uniforms['playerPos'] = app.arena.position.xyz
+    app.current_vr_scene.camera.projection.z_far = 4.
+
 
 app.run()

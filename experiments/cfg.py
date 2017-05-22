@@ -19,7 +19,7 @@ PROJECTOR_LED_ON = True
 
 # Cliff experiment settings
 CLIFF_FILENAME = './assets/viscliff3b.obj'
-CLIFF_TYPE = 'VR'  # Real, or VR, or Static
+CLIFF_TYPE = 'Static'  # Real, or VR, or Static
 CLIFF_SIDE = 'R' # L or R
 CLIFF_OBJECT_L = 'virArena'
 CLIFF_OBJECT_R = 'virArena2'
