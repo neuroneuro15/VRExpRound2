@@ -7,6 +7,8 @@ from psychopy.gui import DlgFromDict
 from pypixxlib import propixx
 import pyglet
 import sys
+from datetime import datetime
+import utils
 
 projector = propixx.PROPixx()
 projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
@@ -70,5 +72,16 @@ if cfg.CLIFF_TYPE.lower() in ['static', 'real']:
     app.current_vr_scene.camera.position.xyz = view_pos
     app.current_vr_scene.camera.uniforms['playerPos'] = view_pos
     app.current_vr_scene.camera.projection.z_far = 4.
+
+
+# Set Motive Filename
+if cfg.RAT.lower() not in ['demo']:
+    now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    filename = '{expname}_{datetime}_{RAT}_{CLIFF_TYPE}_{CLIFF_SIDE}_{person}_{log_code}'.format(
+        expname=cfg.CLIFF_EXPERIMENT_NAME, datetime=now, RAT=cfg.RAT,
+        CLIFF_TYPE=cfg.CLIFF_TYPE, CLIFF_SIDE=cfg.CLIFF_SIDE, person=cfg.EXPERIMENTER[0].upper(),
+        log_code=cfg.PAPER_LOG_CODE)
+    utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
+                                               exclude_subnames=['OBJECT', 'WALL'])
 
 app.run()
