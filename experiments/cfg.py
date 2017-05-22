@@ -18,13 +18,15 @@ PROJECTOR_LED_ON = True
 
 
 # Cliff experiment settings
-CLIFF_FILENAME = './assets/viscliff3b.obj'
-CLIFF_TYPE = 'Static'  # Real, or VR, or Static
-CLIFF_SIDE = 'R' # L or R
+CLIFF_FILENAME = './assets/viscliff4.obj'
+CLIFF_ARENA_LIGHTING_TEXTURE = './assets/uvgrid_bw2_cliffvers.png'
+CLIFF_REALARENA_LIGHTING_DIFFUSE = (1.5,) * 3
+CLIFF_TYPE = 'Real'  # Real, or VR, or Static
+CLIFF_SIDE = 'L' # L or R
 CLIFF_OBJECT_L = 'virArena'
 CLIFF_OBJECT_R = 'virArena2'
 CLIFF_OBJECT_REAL = 'RealArena'
-CLIFF_PROJECTOR_LED_INTENSITY = "6.25"  # Requires exact string: "100.0", "50.0", "25.0", "12.5", "6.25"
+CLIFF_PROJECTOR_LED_INTENSITY = "12.5"  # Requires exact string: "100.0", "50.0", "25.0", "12.5", "6.25"
 
 # Wall experiment settings
 VR_WALL_EXPERIMENT_NAME = 'VRWallExp'
