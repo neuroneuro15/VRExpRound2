@@ -10,10 +10,6 @@ import sys
 from datetime import datetime
 import utils
 
-projector = propixx.PROPixx()
-projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
-projector.setLampLED(cfg.PROJECTOR_LED_ON)
-projector.setLedIntensity(cfg.CLIFF_PROJECTOR_LED_INTENSITY)
 
 # Show User-Defined Experiment Settings
 conditions = {'RAT': cfg.RAT,
@@ -37,6 +33,11 @@ else:
     sys.exit()
 
 
+projector = propixx.PROPixx()
+projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
+projector.setLampLED(cfg.PROJECTOR_LED_ON)
+projector.setLedIntensity("50.0" if 'real' in cfg.CLIFF_TYPE.lower() else "12.5")
+
 # Set up VR Scenes
 cliff_names = {'real': {'l': 'realArena2', 'r': 'realArena2'},
                'vr': {'l': 'virArena', 'r': 'virArena2'},
@@ -45,7 +46,7 @@ arena_name = cliff_names[cfg.CLIFF_TYPE.lower()][cfg.CLIFF_SIDE.lower()]
 
 
 vr_arena = rc.WavefrontReader(cfg.CLIFF_FILENAME).get_mesh(arena_name)
-vr_arena.texture = cfg.CLIFF_ARENA_LIGHTING_TEXTURE
+vr_arena.texture = cfg.CLIFF_REALARENA_LIGHTING_TEXTURE if 'real' in cfg.CLIFF_TYPE.lower() else cfg.CLIFF_VRARENA_LIGHTING_TEXTURE
 vr_arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 vr_arena.uniforms['diffuse'] = cfg.ARENA_LIGHTING_DIFFUSE
 vr_arena.uniforms['specular'] = cfg.ARENA_LIGHTING_SPECULAR

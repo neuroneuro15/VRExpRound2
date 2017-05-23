@@ -20,7 +20,8 @@ PROJECTOR_LED_ON = True
 # Cliff experiment settings
 CLIFF_EXPERIMENT_NAME = 'VRCliffExp'
 CLIFF_FILENAME = './assets/viscliff4.obj'
-CLIFF_ARENA_LIGHTING_TEXTURE = './assets/uvgrid_bw2_cliffvers.png'
+CLIFF_VRARENA_LIGHTING_TEXTURE = './assets/uvgrid_bw2_cliffvers.png'
+CLIFF_REALARENA_LIGHTING_TEXTURE = './assets/uvgrid_bw2_cliffvers_recolored.png'
 CLIFF_REALARENA_LIGHTING_DIFFUSE = (1.5,) * 3
 CLIFF_TYPE = ['VR', 'Static', 'Real']
 CLIFF_SIDE = ['L', 'R']
@@ -76,5 +77,5 @@ VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS = 4.
 VR_OBJECT_ARDUINO_PORT = 'COM7'
 VR_OBJECT_ROBO_COMMAND_UP = b'U'
 VR_OBJECT_ROBO_COMMAND_DOWN = b'D'
-VR_OBJECT_PROJECTOR_LED_INTENSITY = "12.5"  # Requires exact string: "100.0", "50.0", "25.0", "12.5", "6.25"
+VR_OBJECT_PROJECTOR_LED_INTENSITY = "100.0"  # Requires exact string: "100.0", "50.0", "25.0", "12.5", "6.25"
 VR_OBJECT_FADE_SPEED = VR_WALL_FADE_SPEED
