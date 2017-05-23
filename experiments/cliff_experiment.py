@@ -36,7 +36,7 @@ else:
 projector = propixx.PROPixx()
 projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
 projector.setLampLED(cfg.PROJECTOR_LED_ON)
-projector.setLedIntensity("50.0" if 'real' in cfg.CLIFF_TYPE.lower() else "12.5")
+projector.setLedIntensity("100.0" if 'real' in cfg.CLIFF_TYPE.lower() else "12.5")
 
 # Set up VR Scenes
 cliff_names = {'real': {'l': 'realArena2', 'r': 'realArena2'},
@@ -61,6 +61,10 @@ app.arena.texture = cfg.ARENA_LIGHTING_TEXTURE
 app.arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 app.arena.uniforms['diffuse'] = cfg.CLIFF_REALARENA_LIGHTING_DIFFUSE
 app.arena.uniforms['specular'] = cfg.ARENA_LIGHTING_SPECULAR
+
+board = rc.WavefrontReader(cfg.CLIFF_FILENAME).get_mesh('Board')
+board.parent = app.arena
+app.active_scene.meshes.append(board)
 
 app.register_vr_scene(vr_scene)
 
