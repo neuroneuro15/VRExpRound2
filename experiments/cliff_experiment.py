@@ -62,11 +62,22 @@ app.arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 app.arena.uniforms['diffuse'] = cfg.CLIFF_REALARENA_LIGHTING_DIFFUSE
 app.arena.uniforms['specular'] = cfg.ARENA_LIGHTING_SPECULAR
 
-board = rc.WavefrontReader(cfg.CLIFF_FILENAME).get_mesh('Board')
-board.parent = app.arena
-app.active_scene.meshes.append(board)
+if cfg.CLIFF_SHOW_BOARD:
+    board = rc.WavefrontReader(cfg.CLIFF_FILENAME).get_mesh('Board')
+    board.parent = app.arena
+    app.active_scene.meshes.append(board)
 
-app.register_vr_scene(vr_scene)
+if cfg.CLIFF_COVER_RAT_WITH_UMBRELLA:
+    umbrella = rc.WavefrontReader(rc.resources.obj_primitives).get_mesh('Sphere')
+    umbrella.scale.x = .04
+    umbrella.uniforms['diffuse'] = 0., 0., 0.
+    umbrella.uniforms['specular'] = 0., 0., 0.
+    app.active_scene.meshes.append(umbrella)
+    def cover_rat(dt):
+        umbrella.position.xyz = app.rat_rb.position
+    pyglet.clock.schedule(cover_rat)
+
+    app.register_vr_scene(vr_scene)
 
 
 # Alter App Behavior for Static and Real conditions

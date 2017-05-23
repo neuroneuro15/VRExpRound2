@@ -29,6 +29,8 @@ CLIFF_OBJECT_L = 'virArena'
 CLIFF_OBJECT_R = 'virArena2'
 CLIFF_OBJECT_REAL = 'RealArena'
 CLIFF_PROJECTOR_LED_INTENSITY = "12.5"  # Requires exact string: "100.0", "50.0", "25.0", "12.5", "6.25"
+CLIFF_COVER_RAT_WITH_UMBRELLA = True
+CLIFF_SHOW_BOARD = True
 
 # Wall experiment settings
 VR_WALL_EXPERIMENT_NAME = 'VRWallExp'
@@ -48,7 +50,6 @@ VR_WALL_PHASE_3_DURATION_SECS = 240.
 VR_WALL_PHASE_4_DURATION_SECS = 240.
 VR_WALL_PROJECTOR_LED_INTENSITY = "6.25"  # Requires exact string: "100.0", "50.0", "25.0", "12.5", "6.25"
 VR_WALL_FADE_SPEED = 0.125
-
 
 # Object experiment settings
 VR_OBJECT_EXPERIMENT_NAME = 'VRObjectExp'
