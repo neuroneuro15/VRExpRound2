@@ -9,7 +9,7 @@ import pyglet
 import sys
 from datetime import datetime
 import utils
-
+import events
 
 # Show User-Defined Experiment Settings
 conditions = {'RAT': cfg.RAT,
@@ -90,6 +90,7 @@ if cfg.CLIFF_TYPE.lower() in ['static', 'real']:
     app.current_vr_scene.camera.projection.z_far = 4.
 
 
+
 # Set Motive Filename
 if cfg.RAT.lower() not in ['demo']:
     now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
@@ -100,4 +101,18 @@ if cfg.RAT.lower() not in ['demo']:
     utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
                                                exclude_subnames=['OBJECT', 'WALL'])
 
+seq = []
+if cfg.RAT.lower() not in ['test', 'demo']:
+    motive_seq = [
+        events.change_scene_background_color(scene=app.active_scene, color=(0., 0., 1.)),
+        events.wait_for_recording(motive_client=motive),
+        events.change_scene_background_color(scene=app.active_scene, color=(1., 0., 0.)),
+    ]
+    seq.extend(motive_seq)
+
+seq.append(events.wait_duration(100000.))
+exp = events.chain_events(seq, log=True, motive_client=motive)
+exp.next()
+
+pyglet.clock.schedule(exp.send)
 app.run()
