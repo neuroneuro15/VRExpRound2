@@ -30,6 +30,7 @@ CLIFF_OBJECT_R = 'virArena2'
 CLIFF_OBJECT_REAL = 'RealArena'
 CLIFF_PROJECTOR_LED_INTENSITY = "12.5"  # Requires exact string: "100.0", "50.0", "25.0", "12.5", "6.25"
 CLIFF_COVER_RAT_WITH_UMBRELLA = True
+CLIFF_UMBRELLA_SCALE = .036
 CLIFF_SHOW_BOARD = True
 
 # Wall experiment settings

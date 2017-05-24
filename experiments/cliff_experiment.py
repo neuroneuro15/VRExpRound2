@@ -69,7 +69,7 @@ if cfg.CLIFF_SHOW_BOARD:
 
 if cfg.CLIFF_COVER_RAT_WITH_UMBRELLA:
     umbrella = rc.WavefrontReader(rc.resources.obj_primitives).get_mesh('Sphere')
-    umbrella.scale.x = .04
+    umbrella.scale.x = cfg.CLIFF_UMBRELLA_SCALE
     umbrella.uniforms['diffuse'] = 0., 0., 0.
     umbrella.uniforms['specular'] = 0., 0., 0.
     app.active_scene.meshes.append(umbrella)
