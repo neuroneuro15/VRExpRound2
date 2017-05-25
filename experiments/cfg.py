@@ -1,5 +1,5 @@
 RAT = ['Demo', 'Test', 'VR-1A', 'VR-1B', 'VR-2A', 'VR-2B', 'VR-3A', 'VR-3B', 'VR-4A', 'VR-4B', 'VR-5A', 'VR-5B']
-EXPERIMENTER = ['Nicholas A. Del Grosso', 'Eduardo Blanco-Hernandez']
+EXPERIMENTER = ['Eduardo Blanco-Hernandez', 'Nicholas A. Del Grosso']
 # General settings
 ARENA_FILENAME = './assets/arena3uv2.obj'
 ARENA_LIGHTING_DIFFUSE = 1., 1., 1.
