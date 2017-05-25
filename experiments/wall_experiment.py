@@ -32,7 +32,6 @@ if dlg.OK:
         if len(log_code) != 7 or log_code[3] != '-':
             raise ValueError("Invalid PAPER_LOG_CODE.  Please try again.")
         dlg.dictionary['PAPER_LOG_CODE'] = log_code.upper()
-        subprocess.Popen(['holdtimer'])  # Launch the timer program
 
     dlg.dictionary['EXPERIMENT'] = cfg.VR_WALL_EXPERIMENT_NAME
     cfg.__dict__.update(dlg.dictionary)
