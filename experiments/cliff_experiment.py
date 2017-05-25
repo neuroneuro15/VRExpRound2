@@ -19,7 +19,8 @@ conditions = {'RAT': cfg.RAT,
               'CLIFF_SIDE': cfg.CLIFF_SIDE,
               }
 
-dlg = DlgFromDict(conditions, title='{} Experiment Settings'.format(cfg.CLIFF_EXPERIMENT_NAME))
+dlg = DlgFromDict(conditions, title='{} Experiment Settings'.format(cfg.CLIFF_EXPERIMENT_NAME),
+                  order=['RAT', 'CLIFF_TYPE', 'CLIFF_SIDE', 'EXPERIMENTER', 'PAPER_LOG_CODE'])
 if dlg.OK:
     log_code = dlg.dictionary['PAPER_LOG_CODE']
     if not dlg.dictionary['RAT'].lower() in ['test', 'demo']:
