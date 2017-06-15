@@ -25,7 +25,7 @@ conditions = {'RAT': cfg.RAT,
               'VR_SPATIAL_NOVELTY_OBJECT_TYPE': cfg.VR_SPATIAL_NOVELTY_OBJECT_TYPE,
               }
 
-dlg = DlgFromDict(conditions, title='{} Experiment Settings'.format(cfg.VR_OBJECT_EXPERIMENT_NAME),
+dlg = DlgFromDict(conditions, title='{} Experiment Settings'.format(cfg.VR_SPATIAL_NOVELTY_EXPERIMENT_NAME),
                   order=['RAT', 'VR_SPATIAL_NOVELTY_OBJECT_TYPE', 'VR_SPATIAL_NOVELTY_OBJECT_NAME',
                          'VR_SPATIAL_NOVELTY_FAMILIAR_POSITION', 'VR_SPATIAL_NOVELTY_NOVEL_POSITION',
                          'EXPERIMENTER', 'PAPER_LOG_CODE'])
@@ -36,7 +36,7 @@ if dlg.OK:
             raise ValueError("Invalid PAPER_LOG_CODE.  Please try again.")
         subprocess.Popen(['holdtimer'])  # Launch the timer program
 
-    dlg.dictionary['EXPERIMENT'] = cfg.VR_OBJECT_EXPERIMENT_NAME
+    dlg.dictionary['EXPERIMENT'] = cfg.VR_SPATIAL_NOVELTY_EXPERIMENT_NAME
     cfg.__dict__.update(dlg.dictionary)
 else:
     sys.exit()
@@ -44,7 +44,7 @@ else:
 
 projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
 projector.setLampLED(cfg.PROJECTOR_LED_ON)
-proj_brightness = cfg.VR_OBJECT_PROJECTOR_LED_INTENSITY if not 'demo' in cfg.RAT.lower() else '100.0'
+proj_brightness = cfg.VR_SPATIAL_NOVELTY_PROJECTOR_LED_INTENSITY if not 'demo' in cfg.RAT.lower() else '100.0'
 projector.setLedIntensity(proj_brightness)
 
 # Create Virtual Scenes
