@@ -56,7 +56,7 @@ vr_arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 
 vr_object = rc.WavefrontReader(cfg.VR_SPATIAL_NOVELTY_OBJECT_FILENAME).get_mesh(cfg.VR_SPATIAL_NOVELTY_OBJECT_NAME,
                                                                                 scale=cfg.VR_SPATIAL_NOVELTY_OBJECT_SCALE)
-vr_object.position.xyz = cfg.VR_OBJECT_POSITION_L if 'l' in cfg.VR_OBJECT_SIDE.lower() else cfg.VR_OBJECT_POSITION_R  # TODO
+vr_object.position.xyz = cfg.VR_OBJECT_POSITION_L if 'l' in cfg.VR_OBJECT_SIDE[0].lower() else cfg.VR_OBJECT_POSITION_R  # TODO
 vr_object.position.y += cfg.VR_OBJECT_Y_OFFSET  # TODO
 vr_object.uniforms['diffuse'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_DIFFUSE
 vr_object.uniforms['specular'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_SPECULAR
@@ -80,7 +80,7 @@ app.arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 app.register_vr_scene(vr_scene_with_object)
 app.register_vr_scene(vr_scene_without_object)
 
-app.current_vr_scene = None  # TODO
+app.current_vr_scene = vr_scene_without_object
 
 meshes_to_fade = [app.arena]
 
@@ -91,42 +91,35 @@ if cfg.RAT.lower() not in ['test', 'demo']:
     motive_seq = [
         events.change_scene_background_color(scene=app.active_scene, color=(0., 0., 1.)),
         events.wait_for_recording(motive_client=motive),
-        events.change_scene_background_color(scene=app.active_scene, color=(0., 1., 0.)),
-        # events.wait_for_distance_under(rb1=app.arena_rb, rb2=motive.rigid_bodies['TransportBox'], distance=0.5),
-        # events.wait_for_distance_exceeded(rb1=app.rat_rb, rb2=motive.rigid_bodies['TransportBox'], distance=0.4),
         events.change_scene_background_color(scene=app.active_scene, color=(1., 0., 0.)),
     ]
     seq.extend(motive_seq)
 elif cfg.RAT.lower() in 'test':
-    cfg.VR_OBJECT_PHASE_1_DURATION_SECS = 1.
-    cfg.VR_OBJECT_PHASE_2_DURATION_SECS = 1.
-    cfg.VR_OBJECT_PHASE_3_DURATION_SECS = 5.
-    cfg.VR_OBJECT_PHASE_4_DURATION_SECS = 1.
+    cfg.VR_SPATIAL_NOVELTY_PHASE_1_DURATION_SECS = 1.
+    cfg.VR_SPATIAL_NOVELTY_PHASE_2_DURATION_SECS = 1.
+    cfg.VR_SPATIAL_NOVELTY_PHASE_3_DURATION_SECS = 5.
+    cfg.VR_SPATIAL_NOVELTY_PHASE_4_DURATION_SECS = 1.
 else:
-    cfg.VR_OBJECT_PHASE_1_DURATION_SECS = 1.
-    cfg.VR_OBJECT_PHASE_2_DURATION_SECS = 1.
-    cfg.VR_OBJECT_PHASE_3_DURATION_SECS = 50000.
-    cfg.VR_OBJECT_PHASE_4_DURATION_SECS = 1.
+    cfg.VR_SPATIAL_NOVELTY_PHASE_1_DURATION_SECS = 1.
+    cfg.VR_SPATIAL_NOVELTY_PHASE_2_DURATION_SECS = 50000.
+    cfg.VR_SPATIAL_NOVELTY_PHASE_3_DURATION_SECS = 1.
+    cfg.VR_SPATIAL_NOVELTY_PHASE_4_DURATION_SECS = 1.
 
 exp_seq = [
-    events.wait_duration(cfg.VR_OBJECT_PHASE_1_DURATION_SECS),
-    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
-    events.set_scene_to(app, vr_scene_without_object),
-    events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
-    events.wait_duration(cfg.VR_OBJECT_PHASE_2_DURATION_SECS),
-    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
-    events.send_robo_command(robo_arm, cfg.VR_OBJECT_ROBO_COMMAND_UP),
-    events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
+    events.wait_duration(cfg.VR_SPATIAL_NOVELTY_PHASE_1_DURATION_SECS),
+    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
     events.set_scene_to(app, vr_scene_with_object),
-    events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
-    events.wait_duration(cfg.VR_OBJECT_PHASE_3_DURATION_SECS),
-    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
-    events.send_robo_command(robo_arm, cfg.VR_OBJECT_ROBO_COMMAND_DOWN),
-    events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
+    events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
+    events.wait_duration(cfg.VR_SPATIAL_NOVELTY_PHASE_2_DURATION_SECS),
+    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
     events.set_scene_to(app, vr_scene_without_object),
-    events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
-    events.wait_duration(cfg.VR_OBJECT_PHASE_4_DURATION_SECS),
-    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
+    events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
+    events.wait_duration(cfg.VR_SPATIAL_NOVELTY_PHASE_3_DURATION_SECS),
+    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
+    events.set_scene_to(app, vr_scene_with_object),  # TODO: Update Novel Object's Position
+    events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
+    events.wait_duration(cfg.VR_SPATIAL_NOVELTY_PHASE_4_DURATION_SECS),
+    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
     events.close_app(app=app)
 ]
 seq.extend(exp_seq)
@@ -134,12 +127,16 @@ seq.extend(exp_seq)
 # Make logfiles and set filenames
 if cfg.RAT.lower() not in ['demo']:
     now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    filename = '{expname}_{datetime}_{RAT}_{VR_OBJECT_SIDE}_{object_name}_{person}_{log_code}'.format(
-        expname=cfg.VR_OBJECT_EXPERIMENT_NAME, datetime=now, RAT=cfg.RAT,
-        VR_OBJECT_SIDE=cfg.VR_OBJECT_SIDE, object_name=cfg.VR_OBJECT_NAME, person=cfg.EXPERIMENTER[0].upper(),
+    filename = '{expname}_{datetime}_{RAT}_{OBJECT_TYPE}_{FAMILIAR_POSITION}_{NOVEL_POSITION}_{object_name}_{person}_{log_code}'.format(
+        expname=cfg.VR_SPATIAL_NOVELTY_EXPERIMENT_NAME, datetime=now, RAT=cfg.RAT,
+        FAMILIAR_POSITION=cfg.VR_SPATIAL_NOVELTY_FAMILIAR_POSITION,
+        NOVEL_POSITION=cfg.VR_SPATIAL_NOVELTY_NOVEL_POSITION,
+        OBJECT_TYPE=cfg.VR_SPATIAL_NOVELTY_OBJECT_TYPE,
+        object_name=cfg.VR_SPATIAL_NOVELTY_OBJECT_NAME,
+        person=cfg.EXPERIMENTER[0:3].upper(),
         log_code=cfg.PAPER_LOG_CODE)
     utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
-                                               exclude_subnames=['WALL', 'CLIFF'])
+                                               exclude_subnames=['WALL', 'CLIFF', 'OBJECT'])
 
 exp = events.chain_events(seq, log=True, motive_client=motive)
 exp.next()
