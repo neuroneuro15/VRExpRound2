@@ -54,20 +54,36 @@ vr_arena.uniforms['diffuse'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_DIFFUSE
 vr_arena.uniforms['specular'] = cfg.ARENA_LIGHTING_SPECULAR
 vr_arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 
-vr_object = rc.WavefrontReader(cfg.VR_SPATIAL_NOVELTY_OBJECT_FILENAME).get_mesh(cfg.VR_SPATIAL_NOVELTY_OBJECT_NAME,
-                                                                                scale=cfg.VR_SPATIAL_NOVELTY_OBJECT_SCALE)
-vr_object.position.xyz = cfg.VR_OBJECT_POSITION_L if 'l' in cfg.VR_OBJECT_SIDE[0].lower() else cfg.VR_OBJECT_POSITION_R  # TODO
-vr_object.position.y += cfg.VR_OBJECT_Y_OFFSET  # TODO
-vr_object.uniforms['diffuse'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_DIFFUSE
-vr_object.uniforms['specular'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_SPECULAR
-vr_object.uniforms['spec_weight'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_SPEC_WEIGHT
-vr_object.uniforms['ambient'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_AMBIENT
-vr_object.uniforms['flat_shading'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_FLAT_SHADING
+object_reader = rc.WavefrontReader(cfg.VR_SPATIAL_NOVELTY_OBJECT_FILENAME)
+fixed_object = object_reader.get_mesh(cfg.VR_SPATIAL_NOVELTY_OBJECT_NAME, scale=cfg.VR_SPATIAL_NOVELTY_OBJECT_SCALE)
+fixed_object.position.xyz = cfg.VR_SPATIAL_FIXED_OBJECT_POSITION
+fixed_object.uniforms['diffuse'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_DIFFUSE
+fixed_object.uniforms['specular'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_SPECULAR
+fixed_object.uniforms['spec_weight'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_SPEC_WEIGHT
+fixed_object.uniforms['ambient'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_AMBIENT
+fixed_object.uniforms['flat_shading'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_FLAT_SHADING
+
+familiar_object = object_reader.get_mesh(cfg.VR_SPATIAL_NOVELTY_OBJECT_NAME, scale=cfg.VR_SPATIAL_NOVELTY_OBJECT_SCALE)
+familiar_object.position.xyz = cfg.VR_SPATIAL_NOVELTY_OBJECT_POSITIONS[cfg.VR_SPATIAL_NOVELTY_FAMILIAR_POSITION - 1]
+familiar_object.uniforms['diffuse'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_DIFFUSE
+familiar_object.uniforms['specular'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_SPECULAR
+familiar_object.uniforms['spec_weight'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_SPEC_WEIGHT
+familiar_object.uniforms['ambient'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_AMBIENT
+familiar_object.uniforms['flat_shading'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_FLAT_SHADING
+
+novel_object = object_reader.get_mesh(cfg.VR_SPATIAL_NOVELTY_OBJECT_NAME, scale=cfg.VR_SPATIAL_NOVELTY_OBJECT_SCALE)
+novel_object.position.xyz =  cfg.VR_SPATIAL_NOVELTY_OBJECT_POSITIONS[cfg.VR_SPATIAL_NOVELTY_NOVEL_POSITION - 1]
+novel_object.uniforms['diffuse'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_DIFFUSE
+novel_object.uniforms['specular'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_SPECULAR
+novel_object.uniforms['spec_weight'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_SPEC_WEIGHT
+novel_object.uniforms['ambient'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_AMBIENT
+novel_object.uniforms['flat_shading'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_FLAT_SHADING
 
 
 
 vr_scene_without_object = rc.Scene(meshes=[vr_arena], name="Arena without Object")
-vr_scene_with_object = rc.Scene(meshes=[vr_arena, vr_object], name="Arena with Object")
+vr_scene_with_familiar_object = rc.Scene(meshes=[vr_arena, fixed_object, familiar_object], name="Arena with Fixed and Familiar Object")
+vr_scene_with_novel_object = rc.Scene(meshes=[vr_arena, fixed_object, novel_object], name="Arena with Fixed and Novel Object")
 
 
 # Configure Ratcave App and register the virtual Scenes.
@@ -77,8 +93,9 @@ app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_
 app.set_mouse_visible(cfg.MOUSE_CURSOR_VISIBLE)
 app.arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 
-app.register_vr_scene(vr_scene_with_object)
 app.register_vr_scene(vr_scene_without_object)
+app.register_vr_scene(vr_scene_with_familiar_object)
+app.register_vr_scene(vr_scene_with_novel_object)
 
 app.current_vr_scene = vr_scene_without_object
 
@@ -108,7 +125,7 @@ else:
 exp_seq = [
     events.wait_duration(cfg.VR_SPATIAL_NOVELTY_PHASE_1_DURATION_SECS),
     events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
-    events.set_scene_to(app, vr_scene_with_object),
+    events.set_scene_to(app, vr_scene_with_familiar_object),
     events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
     events.wait_duration(cfg.VR_SPATIAL_NOVELTY_PHASE_2_DURATION_SECS),
     events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
@@ -116,7 +133,7 @@ exp_seq = [
     events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
     events.wait_duration(cfg.VR_SPATIAL_NOVELTY_PHASE_3_DURATION_SECS),
     events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
-    events.set_scene_to(app, vr_scene_with_object),  # TODO: Update Novel Object's Position
+    events.set_scene_to(app, vr_scene_with_novel_object),
     events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
     events.wait_duration(cfg.VR_SPATIAL_NOVELTY_PHASE_4_DURATION_SECS),
     events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_SPATIAL_NOVELTY_FADE_SPEED),
