@@ -12,11 +12,8 @@ from datetime import datetime
 import utils
 from pypixxlib import propixx
 
-projector = propixx.PROPixx()
-projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
-projector.setLampLED(cfg.PROJECTOR_LED_ON)
-projector.setLedIntensity(cfg.VR_WALL_PROJECTOR_LED_INTENSITY)
 
+projector = propixx.PROPixx()
 
 # Show User-Defined Experiment Settings
 conditions = {'RAT': cfg.RAT,
@@ -39,6 +36,13 @@ if dlg.OK:
 else:
     sys.exit()
 
+
+
+projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
+projector.setLampLED(cfg.PROJECTOR_LED_ON)
+
+proj_brightness = cfg.VR_WALL_PROJECTOR_LED_INTENSITY if not 'demo' in cfg.RAT.lower() else "100.0"
+projector.setLedIntensity(proj_brightness)
 
 # Create Virtual Scenes
 vr_lighting = {

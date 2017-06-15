@@ -16,9 +16,6 @@ from pypixxlib import propixx
 import warnings
 
 projector = propixx.PROPixx()
-projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
-projector.setLampLED(cfg.PROJECTOR_LED_ON)
-projector.setLedIntensity(cfg.VR_OBJECT_PROJECTOR_LED_INTENSITY)
 
 robo_arm = Serial(cfg.VR_OBJECT_ARDUINO_PORT, timeout=0.5)
 
@@ -50,6 +47,11 @@ if dlg.OK:
 else:
     sys.exit()
 
+
+projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
+projector.setLampLED(cfg.PROJECTOR_LED_ON)
+proj_brightness = cfg.VR_OBJECT_PROJECTOR_LED_INTENSITY if not 'demo' in cfg.RAT.lower() else '100.0'
+projector.setLedIntensity(proj_brightness)
 
 # Create Virtual Scenes
 vr_arena = rc.WavefrontReader(cfg.ARENA_FILENAME).get_mesh('Arena')

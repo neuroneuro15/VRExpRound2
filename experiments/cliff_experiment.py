@@ -37,7 +37,13 @@ else:
 projector = propixx.PROPixx()
 projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
 projector.setLampLED(cfg.PROJECTOR_LED_ON)
-projector.setLedIntensity("100.0" if 'real' in cfg.CLIFF_TYPE.lower() else "12.5")
+if 'real' in cfg.CLIFF_TYPE.lower():
+    proj_brightness = "100.0"
+elif 'demo' in cfg.RAT.lower():
+    proj_brightness = "100.0"
+else:
+    proj_brightness = "12.5"
+projector.setLedIntensity(proj_brightness)
 
 # Set up VR Scenes
 cliff_names = {'real': {'l': 'realArena2', 'r': 'realArena2'},
