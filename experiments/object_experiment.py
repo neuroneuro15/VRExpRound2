@@ -163,7 +163,7 @@ if cfg.RAT.lower() not in ['demo']:
         VR_OBJECT_SIDE=cfg.VR_OBJECT_SIDE, object_name=cfg.VR_OBJECT_NAME, person=cfg.EXPERIMENTER[0].upper(),
         log_code=cfg.PAPER_LOG_CODE)
     utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
-                                               exclude_subnames=['WALL', 'CLIFF'])
+                                               exclude_subnames=['WALL', 'CLIFF', 'SPATIAL_NOVELTY'])
 
 exp = events.chain_events(seq, log=True, motive_client=motive)
 exp.next()
