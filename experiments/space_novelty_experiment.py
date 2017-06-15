@@ -83,22 +83,6 @@ app.register_vr_scene(vr_scene_without_object)
 app.current_vr_scene = None  # TODO
 
 meshes_to_fade = [app.arena]
-# Highlight positions of Real Objects with circles, so squares aren't drawn on them.
-circles = []
-if 'real' in cfg.VR_OBJECT_TYPE.lower():
-    primitive_reader = rc.WavefrontReader(rc.resources.obj_primitives)
-    for position in [cfg.VR_OBJECT_POSITION_L, cfg.VR_OBJECT_POSITION_R]:
-        circle = primitive_reader.get_mesh('Circle')
-        circle.position.xyz = position
-        circle.position.y += cfg.VR_OBJECT_CIRCLE_Y_OFFSET
-        circle.rotation.x = 90
-        circle.parent = app.arena
-        circle.scale.x = cfg.VR_OBJECT_CIRCLE_SCALE
-        circle.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
-        circle.uniforms['diffuse'] = cfg.VR_OBJECT_VRARENA_LIGHTING_DIFFUSE
-        app.active_scene.meshes.append(circle)
-        circles.append(circle)
-        meshes_to_fade.append(circle)
 
 
 # Build experiment event sequence
