@@ -104,3 +104,5 @@ VR_SPATIAL_NOVELTY_PHASE_4_DURATION_SECS = 240.
 VR_SPATIAL_NOVELTY_FADE_SPEED = VR_OBJECT_FADE_SPEED
 VR_SPATIAL_NOVELTY_OBJECT_POSITIONS = [(-.317, -.13, -.151), (.356, -.13, -.143), (-.30, -.13, -.142), (-.33, -.13, -.14),] # TODO: Refine object posiitions
 VR_SPATIAL_FIXED_OBJECT_POSITION =  (.02, -.13, -.14)
+
+# Visual acuity experiment settings
