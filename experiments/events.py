@@ -58,6 +58,10 @@ def change_scene_background_color(scene, color):
     scene.bgColor = color
 
 
+def update_attribute(var, attr, value):
+    dt = yield
+    setattr(var, attr, value)
+
 def close_app(app):
     dt = yield
     app.close()

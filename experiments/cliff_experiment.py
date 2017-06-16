@@ -106,7 +106,7 @@ if cfg.RAT.lower() not in ['demo']:
         CLIFF_TYPE=cfg.CLIFF_TYPE, CLIFF_SIDE=cfg.CLIFF_SIDE, person=cfg.EXPERIMENTER[0].upper(),
         log_code=cfg.PAPER_LOG_CODE)
     utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
-                                               exclude_subnames=['OBJECT', 'WALL', 'SPATIAL_NOVELTY'])
+                                               exclude_subnames=['OBJECT', 'WALL', 'SPATIAL_NOVELTY', 'ACUITY'])
 
 seq = []
 if cfg.RAT.lower() not in ['test', 'demo']:

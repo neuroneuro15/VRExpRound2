@@ -153,7 +153,7 @@ if cfg.RAT.lower() not in ['demo']:
         person=cfg.EXPERIMENTER[0:3].upper(),
         log_code=cfg.PAPER_LOG_CODE)
     utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
-                                               exclude_subnames=['WALL', 'CLIFF', 'OBJECT'])
+                                               exclude_subnames=['WALL', 'CLIFF', 'OBJECT', 'ACUITY'])
 
 exp = events.chain_events(seq, log=True, motive_client=motive)
 exp.next()
