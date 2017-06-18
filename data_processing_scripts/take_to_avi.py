@@ -1,5 +1,8 @@
 import argparse
 from motivebatch import Take
+import os
+from os import path
+
 
 # Get Script Inputs
 parser = argparse.ArgumentParser(description='Convert Motive Take File to CSV Format.')
@@ -10,4 +13,7 @@ args = parser.parse_args()
 
 
 take = Take(args.i)
+
+if not path.exists(path.split(args.o)[0]):
+    os.mkdir(path.split(args.o)[0])
 take.to_avi(args.o)
