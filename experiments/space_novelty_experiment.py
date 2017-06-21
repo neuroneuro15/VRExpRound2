@@ -47,7 +47,7 @@ projector.setLampLED(cfg.PROJECTOR_LED_ON)
 proj_brightness = cfg.VR_SPATIAL_NOVELTY_PROJECTOR_LED_INTENSITY if not 'demo' in cfg.RAT.lower() else '100.0'
 projector.setLedIntensity(proj_brightness)
 
-# Configure Ratcave App and register the virtual Scenes.
+# Configure Ratcave App
 app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_FILENAME,
                  fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN, antialiasing=cfg.ANTIALIASING,
                  fps_mode=cfg.FIRST_PERSON_MODE)
@@ -55,55 +55,51 @@ app.set_mouse_visible(cfg.MOUSE_CURSOR_VISIBLE)
 app.arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 
 
-# Create Virtual Scenes
+# Create and Position Virtual Objects
 vr_arena = rc.WavefrontReader(cfg.ARENA_FILENAME).get_mesh('Arena')
 vr_arena.texture = cfg.ARENA_LIGHTING_TEXTURE
 vr_arena.uniforms['diffuse'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_DIFFUSE
 vr_arena.uniforms['specular'] = cfg.ARENA_LIGHTING_SPECULAR
-vr_arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
+vr_arena.uniforms['flat_shading'] = True #cfg.ARENA_LIGHTING_FLAT_SHADING
 
 object_reader = rc.WavefrontReader(cfg.VR_SPATIAL_NOVELTY_OBJECT_FILENAME)
-
 fixed_object = object_reader.get_mesh(cfg.VR_SPATIAL_NOVELTY_OBJECT_NAME, scale=cfg.VR_SPATIAL_NOVELTY_OBJECT_SCALE)
-fixed_object.parent = app.arena
-fixed_object.position.xyz = cfg.VR_SPATIAL_FIXED_OBJECT_POSITION
-
 familiar_object = object_reader.get_mesh(cfg.VR_SPATIAL_NOVELTY_OBJECT_NAME, scale=cfg.VR_SPATIAL_NOVELTY_OBJECT_SCALE)
-familiar_object.parent = app.arena
-familiar_object.position.xyz = cfg.VR_SPATIAL_NOVELTY_OBJECT_POSITIONS[cfg.VR_SPATIAL_NOVELTY_FAMILIAR_POSITION - 1]
-
 novel_object = object_reader.get_mesh(cfg.VR_SPATIAL_NOVELTY_OBJECT_NAME, scale=cfg.VR_SPATIAL_NOVELTY_OBJECT_SCALE)
-novel_object.parent = app.arena
-novel_object.position.xyz =  cfg.VR_SPATIAL_NOVELTY_OBJECT_POSITIONS[cfg.VR_SPATIAL_NOVELTY_NOVEL_POSITION - 1]
 
 for obj in [fixed_object, familiar_object, novel_object]:
+    obj.parent = app.arena
     obj.uniforms['diffuse'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_DIFFUSE
     obj.uniforms['specular'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_SPECULAR
     obj.uniforms['spec_weight'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_SPEC_WEIGHT
     obj.uniforms['ambient'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_AMBIENT
     obj.uniforms['flat_shading'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_FLAT_SHADING
 
+fixed_object.position.xyz = cfg.VR_SPATIAL_FIXED_OBJECT_POSITION
+familiar_object.position.xyz = cfg.VR_SPATIAL_NOVELTY_OBJECT_POSITIONS[cfg.VR_SPATIAL_NOVELTY_FAMILIAR_POSITION - 1]
+novel_object.position.xyz =  cfg.VR_SPATIAL_NOVELTY_OBJECT_POSITIONS[cfg.VR_SPATIAL_NOVELTY_NOVEL_POSITION - 1]
+
+
+# Configure Scenes: Virtual scenes for '3D' Condition, and Active scenes for '2D' Condition
 if '3D' in cfg.VR_SPATIAL_NOVELTY_OBJECT_TYPE.upper():
 
-    vr_scene_without_object = rc.Scene(meshes=[vr_arena], name="Arena without Object")
     scene_without_object = rc.Scene(meshes=[vr_arena], name="Arena without Object")
     scene_with_familiar_object = rc.Scene(meshes=[vr_arena, fixed_object, familiar_object], name="Arena with Fixed and Familiar Object")
     scene_with_novel_object = rc.Scene(meshes=[vr_arena, fixed_object, novel_object], name="Arena with Fixed and Novel Object")
 
-    app.register_vr_scene(vr_scene_without_object)
     app.register_vr_scene(scene_without_object)
     app.register_vr_scene(scene_with_familiar_object)
     app.register_vr_scene(scene_with_novel_object)
+    app.current_vr_scene = scene_without_object
 
-    scene_with_familiar_object.camera.projection.z_near = cfg.VR_SPATIAL_CAMERA_Z_NEAR
-    scene_with_novel_object.camera.projection.z_near = cfg.VR_SPATIAL_CAMERA_Z_NEAR
-
-    app.current_vr_scene = vr_scene_without_object
+    for scene in [scene_without_object, scene_with_familiar_object, scene_with_novel_object]:
+        scene.camera.projection.z_near = cfg.VR_SPATIAL_CAMERA_Z_NEAR
 
 else:
 
     for obj in [fixed_object, familiar_object, novel_object]:
         obj.position.y += cfg.VR_SPATIAL_CIRCLE_Y_OFFSET
+        obj.rotation.x = 90
 
     scene_without_object = rc.Scene(meshes=[app.arena], name="Arena without Object", bgColor=(1., 1., 0.))
     scene_with_familiar_object = rc.Scene(meshes=[app.arena, fixed_object, familiar_object], name="Arena with Fixed and Familiar Object")
