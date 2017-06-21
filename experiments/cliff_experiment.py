@@ -111,9 +111,9 @@ if cfg.RAT.lower() not in ['demo']:
 seq = []
 if cfg.RAT.lower() not in ['test', 'demo']:
     motive_seq = [
-        events.change_scene_background_color(scene=app.active_scene, color=(0., 0., 1.)),
+        events.change_scene_background_color(scene=app.active_scene, color=(0., 0., 0.1)),
         events.wait_for_recording(motive_client=motive),
-        events.change_scene_background_color(scene=app.active_scene, color=(1., 0., 0.)),
+        events.change_scene_background_color(scene=app.active_scene, color=(0.1, 0., 0.)),
     ]
     seq.extend(motive_seq)
 
