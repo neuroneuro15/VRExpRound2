@@ -12,7 +12,7 @@ def fade_to_black(meshes, speed=1.):
         dt = yield
         for mesh in meshes:
             mesh.uniforms['diffuse'] = [dif + (vel  * dt) for dif in mesh.uniforms['diffuse']]
-
+    meshes[0].uniforms['diffuse'] = 0., 0., 0.
 
 def fade_to_white(meshes, speed=1.):
     vel = speed
@@ -20,6 +20,8 @@ def fade_to_white(meshes, speed=1.):
         dt = yield
         for mesh in meshes:
             mesh.uniforms['diffuse'] = [dif + (vel  * dt) for dif in mesh.uniforms['diffuse']]
+    meshes[0].uniforms['diffuse'] = 1., 1., 1.
+
 
 
 def wait_duration(duration):
