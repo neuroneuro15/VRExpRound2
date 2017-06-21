@@ -97,6 +97,9 @@ app.register_vr_scene(vr_scene_without_object)
 app.register_vr_scene(vr_scene_with_familiar_object)
 app.register_vr_scene(vr_scene_with_novel_object)
 
+vr_scene_with_familiar_object.camera.projection.z_near = cfg.VR_SPATIAL_CAMERA_Z_NEAR
+vr_scene_with_novel_object.camera.projection.z_near = cfg.VR_SPATIAL_CAMERA_Z_NEAR
+
 app.current_vr_scene = vr_scene_without_object
 
 meshes_to_fade = [app.arena]
