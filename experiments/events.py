@@ -32,9 +32,12 @@ def wait_duration(duration):
         curr_time += dt
 
 
-def set_scene_to(app, new_scene):
+def set_scene_to(app, new_scene, virtual_scene=True):
     dt = yield
-    app.current_vr_scene = new_scene
+    if virtual_scene:
+        app.current_vr_scene = new_scene
+    else:
+        app.active_scene = new_scene
 
 
 def send_robo_command(device, msg):
