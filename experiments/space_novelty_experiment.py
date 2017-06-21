@@ -82,10 +82,10 @@ novel_object = object_reader.get_mesh(cfg.VR_SPATIAL_NOVELTY_OBJECT_NAME, scale=
 
 for obj in [fixed_object, familiar_object, novel_object]:
     obj.parent = app.arena
-    obj.uniforms['diffuse'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_DIFFUSE
+    obj.uniforms['diffuse'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_DIFFUSE if '2D' in cfg.VR_SPATIAL_NOVELTY_OBJECT_TYPE else [el * 1.5 for el in cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_DIFFUSE]
     obj.uniforms['specular'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_SPECULAR
     obj.uniforms['spec_weight'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_SPEC_WEIGHT
-    obj.uniforms['ambient'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_AMBIENT
+    obj.uniforms['ambient'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_AMBIENT if '2D' in cfg.VR_SPATIAL_NOVELTY_OBJECT_TYPE else (2.5,) * 3
     obj.uniforms['flat_shading'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_FLAT_SHADING
 
 fixed_object.position.xyz = cfg.VR_SPATIAL_FIXED_OBJECT_POSITIONS[cfg.VR_SPATIAL_NOVELTY_FIXED_POSITION - 1]
