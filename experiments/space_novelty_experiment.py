@@ -22,12 +22,14 @@ conditions = {'RAT': cfg.RAT,
               'VR_SPATIAL_NOVELTY_OBJECT_NAME': cfg.VR_SPATIAL_NOVELTY_OBJECT_NAME,
               'VR_SPATIAL_NOVELTY_FAMILIAR_POSITION': cfg.VR_SPATIAL_NOVELTY_FAMILIAR_POSITION,
               'VR_SPATIAL_NOVELTY_NOVEL_POSITION': cfg.VR_SPATIAL_NOVELTY_NOVEL_POSITION,
+              'VR_SPATIAL_NOVELTY_FIXED_POSITION': cfg.VR_SPATIAL_NOVELTY_FIXED_POSITION,
               'VR_SPATIAL_NOVELTY_OBJECT_TYPE': cfg.VR_SPATIAL_NOVELTY_OBJECT_TYPE,
+
               }
 
 dlg = DlgFromDict(conditions, title='{} Experiment Settings'.format(cfg.VR_SPATIAL_NOVELTY_EXPERIMENT_NAME),
                   order=['RAT', 'VR_SPATIAL_NOVELTY_OBJECT_TYPE', 'VR_SPATIAL_NOVELTY_OBJECT_NAME',
-                         'VR_SPATIAL_NOVELTY_FAMILIAR_POSITION', 'VR_SPATIAL_NOVELTY_NOVEL_POSITION',
+                         'VR_SPATIAL_NOVELTY_FAMILIAR_POSITION', 'VR_SPATIAL_NOVELTY_NOVEL_POSITION', 'VR_SPATIAL_NOVELTY_FIXED_POSITION',
                          'EXPERIMENTER', 'PAPER_LOG_CODE'])
 if dlg.OK:
     log_code = dlg.dictionary['PAPER_LOG_CODE']
@@ -44,7 +46,16 @@ else:
 
 projector.setSleepMode(not cfg.PROJECTOR_TURNED_ON)
 projector.setLampLED(cfg.PROJECTOR_LED_ON)
-proj_brightness = cfg.VR_SPATIAL_NOVELTY_PROJECTOR_LED_INTENSITY if not 'demo' in cfg.RAT.lower() else '100.0'
+
+
+if 'demo' in cfg.RAT.lower():
+    proj_brightness = "100.0"
+elif '2D' in cfg.VR_SPATIAL_NOVELTY_OBJECT_TYPE:
+    proj_brightness = "6.25"
+else:
+    proj_brightness = "12.5"
+
+# proj_brightness = cfg.VR_SPATIAL_NOVELTY_PROJECTOR_LED_INTENSITY if not 'demo' in cfg.RAT.lower() else '100.0'
 projector.setLedIntensity(proj_brightness)
 
 # Configure Ratcave App
@@ -75,7 +86,7 @@ for obj in [fixed_object, familiar_object, novel_object]:
     obj.uniforms['ambient'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_AMBIENT
     obj.uniforms['flat_shading'] = cfg.VR_SPATIAL_NOVELTY_LIGHTING_OBJECT_FLAT_SHADING
 
-fixed_object.position.xyz = cfg.VR_SPATIAL_FIXED_OBJECT_POSITION
+fixed_object.position.xyz = cfg.VR_SPATIAL_FIXED_OBJECT_POSITIONS[cfg.VR_SPATIAL_NOVELTY_FIXED_POSITION - 1]
 familiar_object.position.xyz = cfg.VR_SPATIAL_NOVELTY_OBJECT_POSITIONS[cfg.VR_SPATIAL_NOVELTY_FAMILIAR_POSITION - 1]
 novel_object.position.xyz =  cfg.VR_SPATIAL_NOVELTY_OBJECT_POSITIONS[cfg.VR_SPATIAL_NOVELTY_NOVEL_POSITION - 1]
 
