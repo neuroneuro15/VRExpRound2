@@ -36,12 +36,13 @@ if dlg.OK:
     if not dlg.dictionary['RAT'].lower() in ['test', 'demo']:
         if len(log_code) != 7 or log_code[3] != '-':
             raise ValueError("Invalid PAPER_LOG_CODE.  Please try again.")
-        if cfg.VR_SPATIAL_NOVELTY_NOVEL_POSITION == cfg.VR_SPATIAL_NOVELTY_FAMILIAR_POSITION:
-            raise ValueError("Familiar Position and Novel Position cannot be equal in this experiment.")
+
         subprocess.Popen(['holdtimer'])  # Launch the timer program
 
     dlg.dictionary['EXPERIMENT'] = cfg.VR_SPATIAL_NOVELTY_EXPERIMENT_NAME
     cfg.__dict__.update(dlg.dictionary)
+    if cfg.VR_SPATIAL_NOVELTY_NOVEL_POSITION == cfg.VR_SPATIAL_NOVELTY_FAMILIAR_POSITION:
+            raise ValueError("Familiar Position and Novel Position cannot be equal in this experiment.")
 else:
     sys.exit()
 
