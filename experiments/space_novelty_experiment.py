@@ -172,10 +172,11 @@ seq.extend(exp_seq)
 # Make logfiles and set filenames
 if cfg.RAT.lower() not in ['demo']:
     now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    filename = '{expname}_{datetime}_{RAT}_{OBJECT_TYPE}_{FAMILIAR_POSITION}_{NOVEL_POSITION}_{object_name}_{person}_{log_code}'.format(
+    filename = '{expname}_{datetime}_{RAT}_{OBJECT_TYPE}_{FAMILIAR_POSITION}_{NOVEL_POSITION}_{FIXED_POSITION}_{object_name}_{person}_{log_code}'.format(
         expname=cfg.VR_SPATIAL_NOVELTY_EXPERIMENT_NAME, datetime=now, RAT=cfg.RAT,
         FAMILIAR_POSITION=cfg.VR_SPATIAL_NOVELTY_FAMILIAR_POSITION,
         NOVEL_POSITION=cfg.VR_SPATIAL_NOVELTY_NOVEL_POSITION,
+        FIXED_POSITION=cfg.VR_SPATIAL_NOVELTY_FIXED_POSITION,
         OBJECT_TYPE=cfg.VR_SPATIAL_NOVELTY_OBJECT_TYPE,
         object_name=cfg.VR_SPATIAL_NOVELTY_OBJECT_NAME,
         person=cfg.EXPERIMENTER[0:3].upper(),
