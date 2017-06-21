@@ -36,6 +36,8 @@ if dlg.OK:
     if not dlg.dictionary['RAT'].lower() in ['test', 'demo']:
         if len(log_code) != 7 or log_code[3] != '-':
             raise ValueError("Invalid PAPER_LOG_CODE.  Please try again.")
+        if cfg.VR_SPATIAL_NOVELTY_NOVEL_POSITION == cfg.VR_SPATIAL_NOVELTY_FAMILIAR_POSITION:
+            raise ValueError("Familiar Position and Novel Position cannot be equal in this experiment.")
         subprocess.Popen(['holdtimer'])  # Launch the timer program
 
     dlg.dictionary['EXPERIMENT'] = cfg.VR_SPATIAL_NOVELTY_EXPERIMENT_NAME
@@ -112,9 +114,9 @@ else:
         obj.position.y += cfg.VR_SPATIAL_CIRCLE_Y_OFFSET
         obj.rotation.x = 90
 
-    scene_without_object = rc.Scene(meshes=[app.arena], name="Arena without Object", bgColor=(1., 1., 0.))
-    scene_with_familiar_object = rc.Scene(meshes=[app.arena, fixed_object, familiar_object], name="Arena with Fixed and Familiar Object")
-    scene_with_novel_object = rc.Scene(meshes=[app.arena, fixed_object, novel_object], name="Arena with Fixed and Novel Object")
+    scene_without_object = rc.Scene(meshes=[app.arena], name="Arena without Object", bgColor=(1., 0., 0.))
+    scene_with_familiar_object = rc.Scene(meshes=[app.arena, fixed_object, familiar_object], name="Arena with Fixed and Familiar Object", bgColor=(1., 0., 0.))
+    scene_with_novel_object = rc.Scene(meshes=[app.arena, fixed_object, novel_object], name="Arena with Fixed and Novel Object", bgColor=(1., 0., 0.))
 
     for scene in [scene_without_object, scene_with_familiar_object, scene_with_novel_object]:
         scene.camera = app.active_scene.camera
@@ -138,10 +140,10 @@ if cfg.RAT.lower() not in ['test', 'demo']:
     ]
     seq.extend(motive_seq)
 elif cfg.RAT.lower() in 'test':
-    cfg.VR_SPATIAL_NOVELTY_PHASE_1_DURATION_SECS = 1.
-    cfg.VR_SPATIAL_NOVELTY_PHASE_2_DURATION_SECS = 1.
-    cfg.VR_SPATIAL_NOVELTY_PHASE_3_DURATION_SECS = 5.
-    cfg.VR_SPATIAL_NOVELTY_PHASE_4_DURATION_SECS = 1.
+    cfg.VR_SPATIAL_NOVELTY_PHASE_1_DURATION_SECS = 3.
+    cfg.VR_SPATIAL_NOVELTY_PHASE_2_DURATION_SECS = 3.
+    cfg.VR_SPATIAL_NOVELTY_PHASE_3_DURATION_SECS = 3.
+    cfg.VR_SPATIAL_NOVELTY_PHASE_4_DURATION_SECS = 3.
 else:
     cfg.VR_SPATIAL_NOVELTY_PHASE_1_DURATION_SECS = 1.
     cfg.VR_SPATIAL_NOVELTY_PHASE_2_DURATION_SECS = 50000.
