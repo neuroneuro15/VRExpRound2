@@ -16,19 +16,24 @@ def task_convert_take_files():
             if 'Exp' not in basename:
                 creation_datetime = datetime.fromtimestamp(path.getctime(path.join(currpath, take_file)))
                 basename = basename + '_' + creation_datetime.strftime('%Y%m%d_%H%M%S') + '_' + str(idx1) + '_' + str(idx2)
-            # print(path.join(currpath, basename))
-            yield {
-                'file_dep': [path.join(currpath, take_file)],
-                'targets': [path.join(converted_basedir, basename, basename + '.csv')],
-                'actions': ['ipy64 take_to_csv.py "%(dependencies)s" "%(targets)s"'],
-                'name': 'to_csv: {}'.format(basename),
-            }
+            if 'Acuity' not in basename:
+                continue
 
-            yield {
-                'file_dep': [path.join(currpath, take_file)],
-                'targets': [path.join(converted_basedir, basename, basename + '.avi')],
-                'actions': ['ipy64 take_to_avi.py "%(dependencies)s" "%(targets)s"'],
-                'name': 'to_avi: {}'.format(basename),
-            }
+            # print('About to Start Working on File: ', path.join(currpath, basename))
+            if not 'H' in take_file[:5]:  # Skipping the Babit files
+                yield {
+                    'file_dep': [path.join(currpath, take_file)],
+                    'targets': [path.join(converted_basedir, basename, basename + '.csv')],
+                    'actions': ['ipy64 take_to_csv.py "%(dependencies)s" "%(targets)s"'],
+                    'name': 'to_csv: {}'.format(basename),
+                    'verbosity': 2,
+                }
 
+                yield {
+                    'file_dep': [path.join(currpath, take_file)],
+                    'targets': [path.join(converted_basedir, basename, basename + '.avi')],
+                    'actions': ['ipy64 take_to_avi.py "%(dependencies)s" "%(targets)s"'],
+                    'name': 'to_avi: {}'.format(basename),
+                    'verbosity': 2,
+                }
 

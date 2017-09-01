@@ -53,10 +53,10 @@ projector.setLampLED(cfg.PROJECTOR_LED_ON)
 
 if 'demo' in cfg.RAT.lower():
     proj_brightness = "100.0"
-elif '2D' in cfg.VR_SPATIAL_NOVELTY_OBJECT_TYPE:
+elif 'Real' in cfg.VR_SPATIAL_NOVELTY_OBJECT_TYPE:
     proj_brightness = "6.25"
 else:
-    proj_brightness = "12.5"
+    proj_brightness = "6.25"
 
 # proj_brightness = cfg.VR_SPATIAL_NOVELTY_PROJECTOR_LED_INTENSITY if not 'demo' in cfg.RAT.lower() else '100.0'
 projector.setLedIntensity(proj_brightness)

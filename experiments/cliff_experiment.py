@@ -57,11 +57,11 @@ vr_arena.texture = cfg.CLIFF_REALARENA_LIGHTING_TEXTURE if 'real' in cfg.CLIFF_T
 vr_arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 vr_arena.uniforms['diffuse'] = cfg.ARENA_LIGHTING_DIFFUSE
 vr_arena.uniforms['specular'] = cfg.ARENA_LIGHTING_SPECULAR
-vr_scene = rc.Scene(meshes=vr_arena)
+vr_scene = rc.Scene(meshes=[vr_arena])
 
 # Configure App
 app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_FILENAME,
-                 fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN, antialiasing=cfg.ANTIALIASING)
+                 fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN, antialiasing=cfg.ANTIALIASING, fps_mode=True)
 app.set_mouse_visible(cfg.MOUSE_CURSOR_VISIBLE)
 
 app.arena.texture = cfg.ARENA_LIGHTING_TEXTURE
@@ -73,6 +73,7 @@ if cfg.CLIFF_SHOW_BOARD:
     board = rc.WavefrontReader(cfg.CLIFF_FILENAME).get_mesh('Board')
     board.parent = app.arena
     app.active_scene.meshes.append(board)
+    vr_scene.meshes.append(board)
 
 if cfg.CLIFF_COVER_RAT_WITH_UMBRELLA:
     umbrella = rc.WavefrontReader(rc.resources.obj_primitives).get_mesh('Sphere')

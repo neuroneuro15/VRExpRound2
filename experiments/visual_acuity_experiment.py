@@ -18,19 +18,12 @@ projector = propixx.PROPixx()
 
 # Show User-Defined Experiment Settings
 conditions = {'RAT': cfg.RAT,
-              'EXPERIMENTER': cfg.EXPERIMENTER,
-              'PAPER_LOG_CODE': cfg.PAPER_LOG_CODE,
+              'EXPERIMENTER': cfg.EXPERIMENTER
               }
 
 dlg = DlgFromDict(conditions, title='{} Experiment Settings'.format(cfg.VR_ACUITY_EXPERIMENT_NAME),
-                  order=['RAT', 'EXPERIMENTER', 'PAPER_LOG_CODE'])
+                  order=['RAT', 'EXPERIMENTER'])
 if dlg.OK:
-    log_code = dlg.dictionary['PAPER_LOG_CODE']
-    if not dlg.dictionary['RAT'].lower() in ['test', 'demo']:
-        if len(log_code) != 7 or log_code[3] != '-':
-            raise ValueError("Invalid PAPER_LOG_CODE.  Please try again.")
-        subprocess.Popen(['holdtimer'])  # Launch the timer program
-
     dlg.dictionary['EXPERIMENT'] = cfg.VR_ACUITY_EXPERIMENT_NAME
     cfg.__dict__.update(dlg.dictionary)
 else:
@@ -68,11 +61,12 @@ app.arena.uniforms['flat_shading'] = cfg.ARENA_LIGHTING_FLAT_SHADING
 
 app.register_vr_scene(vr_scene)
 app.current_vr_scene = vr_scene
+vr_scene.bgColor = (1., 1., 1.)
 
 
-circle = object_reader.get_mesh('Circle', scale=.2)
+circle = object_reader.get_mesh('Circle', scale=.21)
 circle.parent = app.arena
-circle.position.xyz = 0., 0., 0.
+circle.position.xyz = 0., 0, -0.01
 circle.uniforms['diffuse'] = .5, .5, .5
 circle.uniforms['flat_shading'] = True
 circle.rotation.x = 90
@@ -83,29 +77,28 @@ cylinder_speed = 4.
 
 
 # Build experiment event sequence
-seq = []
-for speed in random.permutation(cfg.VR_ACUITY_CYLINDER_SPEEDS):
+seq = [events.update_attribute(cylinder, 'visible', False),
+       events.wait_duration(20.)]
+for speed in random.permutation(cfg.VR_ACUITY_CYLINDER_SPEEDS * 2):
     for direction in [1, -1]:
         phase_seq = [
+            events.update_attribute(cylinder, 'visible', True),
             events.update_attribute(cylinder, 'speed', speed * direction),
             events.wait_duration(cfg.VR_ACUITY_PHASE_DURATION_SECS),
+            events.update_attribute(cylinder, 'visible', False),
+            events.wait_duration(cfg.VR_ACUITY_ISI_DURATION_SECS),
         ]
         seq.extend(phase_seq)
 seq.append(events.close_app(app=app))
 
-# # Make logfiles and set filenames
-# if cfg.RAT.lower() not in ['demo']:
-#     now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-#     filename = '{expname}_{datetime}_{RAT}_{OBJECT_TYPE}_{FAMILIAR_POSITION}_{NOVEL_POSITION}_{object_name}_{person}_{log_code}'.format(
-#         expname=cfg.VR_ACUITY_EXPERIMENT_NAME, datetime=now, RAT=cfg.RAT,
-#         FAMILIAR_POSITION=cfg.VR_SPATIAL_NOVELTY_FAMILIAR_POSITION,
-#         NOVEL_POSITION=cfg.VR_SPATIAL_NOVELTY_NOVEL_POSITION,
-#         OBJECT_TYPE=cfg.VR_SPATIAL_NOVELTY_OBJECT_TYPE,
-#         object_name=cfg.VR_SPATIAL_NOVELTY_OBJECT_NAME,
-#         person=cfg.EXPERIMENTER[0:3].upper(),
-#         log_code=cfg.PAPER_LOG_CODE)
-#     utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
-#                                                exclude_subnames=['WALL', 'CLIFF', 'OBJECT'])
+# Make logfiles and set filenames
+if cfg.RAT.lower() not in ['demo']:
+    now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    filename = '{expname}_{datetime}_{RAT}_{person}'.format(
+        expname=cfg.VR_ACUITY_EXPERIMENT_NAME, datetime=now, RAT=cfg.RAT,
+        person=cfg.EXPERIMENTER[0:3].upper())
+    utils.create_and_configure_experiment_logs(filename=filename, motive_client=motive,
+                                               exclude_subnames=['WALL', 'CLIFF', 'OBJECT', 'VR_SPATIAL'])
 
 def rotate_cylinder(dt):
     global cylinder

@@ -17,12 +17,12 @@ import warnings
 
 projector = propixx.PROPixx()
 
-robo_arm = Serial(cfg.VR_OBJECT_ARDUINO_PORT, timeout=0.5)
-
-# print('Current RoboArm rotation: ', motive.rigid_bodies['RoboArm'].rotation )
-if motive.rigid_bodies['RoboArm'].rotation[2] > -15:
-    warnings.warn("RoboArm seems to be raised currently. It should be lowered first.")
-    robo_arm.write('D')
+# robo_arm = Serial(cfg.VR_OBJECT_ARDUINO_PORT, timeout=0.5)
+#
+# # print('Current RoboArm rotation: ', motive.rigid_bodies['RoboArm'].rotation )
+# if motive.rigid_bodies['RoboArm'].rotation[2] > -15:
+#     warnings.warn("RoboArm seems to be raised currently. It should be lowered first.")
+#     robo_arm.write('D')
 
 
 # Show User-Defined Experiment Settings
@@ -139,14 +139,14 @@ exp_seq = [
     events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
     events.wait_duration(cfg.VR_OBJECT_PHASE_2_DURATION_SECS),
     events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
-    events.send_robo_command(robo_arm, cfg.VR_OBJECT_ROBO_COMMAND_UP),
-    events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
+    # events.send_robo_command(robo_arm, cfg.VR_OBJECT_ROBO_COMMAND_UP),
+    # events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
     events.set_scene_to(app, vr_scene_with_object),
     events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
     events.wait_duration(cfg.VR_OBJECT_PHASE_3_DURATION_SECS),
     events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
-    events.send_robo_command(robo_arm, cfg.VR_OBJECT_ROBO_COMMAND_DOWN),
-    events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
+    # events.send_robo_command(robo_arm, cfg.VR_OBJECT_ROBO_COMMAND_DOWN),
+    # events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
     events.set_scene_to(app, vr_scene_without_object),
     events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
     events.wait_duration(cfg.VR_OBJECT_PHASE_4_DURATION_SECS),

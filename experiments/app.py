@@ -9,7 +9,7 @@ from natnetclient import NatClient
 import utils
 
 
-motive = NatClient(read_rate=2000)
+motive = NatClient(read_rate=2000, )
 if not motive.rigid_bodies:
     raise IOError("Not Detecting Rigid Bodies.  Turn RigidBody Streaming On in the Motive Streaming Pane.")
 
@@ -48,7 +48,8 @@ class RatcaveApp(pyglet.window.Window):
         self.aa_quad.texture = self.fbo_aa.texture
         self.shader_deferred = rc.Shader.from_file(*rc.resources.deferredShader)
         if fps_mode:
-            raise NotImplementedError("Haven't gotten fps_mode to work properly yet.")
+            pass
+            # raise NotImplementedError("Haven't gotten fps_mode to work properly yet.")
         self.fps_mode = fps_mode
 
         pyglet.clock.schedule(self.update)
@@ -72,9 +73,9 @@ class RatcaveApp(pyglet.window.Window):
                 else:
                     self.active_scene.draw()
 
-        if self.antialiasing:
-            with self.shader_deferred:
-                self.aa_quad.draw()
+            if self.antialiasing:
+                with self.shader_deferred:
+                    self.aa_quad.draw()
 
     def update(self, dt):
         """Update arena position and vr_scene's camera to match motive's Arena and Rat rigid bodies."""
@@ -82,9 +83,10 @@ class RatcaveApp(pyglet.window.Window):
         self.arena.rotation.xyzw = self.arena_rb.quaternion
 
         if self.current_vr_scene:
-            self.current_vr_scene.camera.position.xyz = self.rat_rb.position
-            self.current_vr_scene.camera.rotation.xyzw = self.rat_rb.quaternion
-            self.current_vr_scene.camera.uniforms['playerPos'] = self.current_vr_scene.camera.position.xyz
+            if sum(self.rat_rb.position) != 0:
+                self.current_vr_scene.camera.position.xyz = self.rat_rb.position
+                self.current_vr_scene.camera.rotation.xyzw = self.rat_rb.quaternion
+                self.current_vr_scene.camera.uniforms['playerPos'] = self.current_vr_scene.camera.position.xyz
 
     @property
     def vr_scenes(self):
@@ -122,6 +124,9 @@ class RatcaveApp(pyglet.window.Window):
 
         if not face_culling:
             scene.gl_states = scene.gl_states[:-1]
+
+        if self.fps_mode:
+            scene.camera.projection.fov_y = 120
 
         self._vr_scenes.add(scene)
         self.current_vr_scene = scene
