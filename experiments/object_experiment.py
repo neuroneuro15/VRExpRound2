@@ -32,9 +32,10 @@ conditions = {'RAT': cfg.RAT,
               'VR_OBJECT_NAME': cfg.VR_OBJECT_NAME,
               'VR_OBJECT_SIDE': cfg.VR_OBJECT_SIDE,
               'VR_OBJECT_TYPE': cfg.VR_OBJECT_TYPE,
+              'FIRST_PERSON_MODE': cfg.FIRST_PERSON_MODE
               }
 dlg = DlgFromDict(conditions, title='{} Experiment Settings'.format(cfg.VR_OBJECT_EXPERIMENT_NAME),
-                  order=['RAT', 'VR_OBJECT_TYPE', 'VR_OBJECT_SIDE', 'VR_OBJECT_NAME', 'EXPERIMENTER', 'PAPER_LOG_CODE'])
+                  order=['RAT', 'VR_OBJECT_TYPE', 'VR_OBJECT_SIDE', 'VR_OBJECT_NAME', 'EXPERIMENTER', 'PAPER_LOG_CODE', 'FIRST_PERSON_MODE'])
 if dlg.OK:
     log_code = dlg.dictionary['PAPER_LOG_CODE']
     if not dlg.dictionary['RAT'].lower() in ['test', 'demo']:

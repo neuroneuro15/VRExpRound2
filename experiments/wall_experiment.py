@@ -20,10 +20,11 @@ conditions = {'RAT': cfg.RAT,
               'EXPERIMENTER': cfg.EXPERIMENTER,
               'VR_WALL_X_OFFSET': cfg.VR_WALL_X_OFFSET,
               'PAPER_LOG_CODE': cfg.PAPER_LOG_CODE,
+              'FIRST_PERSON_MODE': cfg.FIRST_PERSON_MODE
               }
 
 dlg = DlgFromDict(conditions, title='{} Experiment Settings'.format(cfg.VR_WALL_EXPERIMENT_NAME),
-                  order=['RAT', 'VR_WALL_X_OFFSET', 'EXPERIMENTER', 'PAPER_LOG_CODE'])
+                  order=['RAT', 'VR_WALL_X_OFFSET', 'EXPERIMENTER', 'PAPER_LOG_CODE', 'FIRST_PERSON_MODE'])
 if dlg.OK:
     log_code = dlg.dictionary['PAPER_LOG_CODE']
     if not dlg.dictionary['RAT'].lower() in ['test', 'demo']:

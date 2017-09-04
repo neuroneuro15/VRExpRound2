@@ -16,7 +16,6 @@ FIRST_PERSON_MODE = False
 PROJECTOR_TURNED_ON = True
 PROJECTOR_LED_ON = True
 
-
 # Cliff experiment settings
 CLIFF_EXPERIMENT_NAME = 'VRCliffExp'
 CLIFF_FILENAME = './assets/viscliff4.obj'

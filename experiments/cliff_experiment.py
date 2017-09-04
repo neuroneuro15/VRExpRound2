@@ -17,6 +17,7 @@ conditions = {'RAT': cfg.RAT,
               'PAPER_LOG_CODE': cfg.PAPER_LOG_CODE,
               'CLIFF_TYPE': cfg.CLIFF_TYPE,
               'CLIFF_SIDE': cfg.CLIFF_SIDE,
+              'FIRST_PERSON_MODE': cfg.FIRST_PERSON_MODE
               }
 
 dlg = DlgFromDict(conditions, title='{} Experiment Settings'.format(cfg.CLIFF_EXPERIMENT_NAME),
@@ -61,7 +62,7 @@ vr_scene = rc.Scene(meshes=[vr_arena])
 
 # Configure App
 app = RatcaveApp(arena_objfile=cfg.ARENA_FILENAME, projector_file=cfg.PROJECTOR_FILENAME,
-                 fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN, antialiasing=cfg.ANTIALIASING, fps_mode=True)
+                 fullscreen=cfg.FULLSCREEN, screen=cfg.SCREEN, antialiasing=cfg.ANTIALIASING, fps_mode=cfg.FIRST_PERSON_MODE)
 app.set_mouse_visible(cfg.MOUSE_CURSOR_VISIBLE)
 
 app.arena.texture = cfg.ARENA_LIGHTING_TEXTURE
