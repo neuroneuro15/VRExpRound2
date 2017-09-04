@@ -49,7 +49,11 @@ def load_projected_scene(arena_file, projector_file, motive_client):
     """Scene-building convenience function. Returns (scene, arena, arena_rb) from filenames and motive."""
     arena, arena_rb = get_arena_with_rigidbody(arena_objfilename=arena_file, motive_client=motive_client)
     beamer = get_beamer_camera(fname=projector_file)
-    scene = rc.Scene(meshes=[arena], camera=beamer, bgColor=(.6, 0, 0))
+    scene = rc.Scene(meshes=[arena], bgColor=(.6, 0, 0))
+    scene.camera.position.xyz = beamer.position.xyz
+    scene.camera.rotation.xyz = beamer.rotation.xyz
+    scene.camera.projection.fov_y = beamer.projection.fov_y
+    scene.camera.projection.aspect = beamer.projection.aspect
     scene.gl_states = scene.gl_states[:-1]
     scene.light.position.xyz = beamer.position.xyz
     return scene, arena, arena_rb
