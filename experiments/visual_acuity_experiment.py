@@ -37,17 +37,17 @@ projector.setLedIntensity(proj_brightness)
 
 # Create Virtual Scenes
 object_reader = rc.WavefrontReader(rc.resources.obj_primitives)
-cylinder = object_reader.get_mesh('Cylinder', scale=.6)
+cylinder = object_reader.get_mesh('Cylinder', scale=.9)
 cylinder.position.xyz =cfg.VR_ACUITY_CYLINDER_POSITION
 cylinder.uniforms['diffuse'] = cfg.VR_ACUITY_LIGHTING_DIFFUSE
 cylinder.uniforms['specular'] = cfg.VR_ACUITY_LIGHTING_SPECULAR
 cylinder.uniforms['spec_weight'] = cfg.VR_ACUITY_LIGHTING_SPEC_WEIGHT
 cylinder.uniforms['ambient'] = cfg.VR_ACUITY_LIGHTING_AMBIENT
-# cylinder.uniforms['flat_shading'] = cfg.VR_ACUITY_LIGHTING_FLAT_SHADING
+cylinder.uniforms['flat_shading'] = True #cfg.VR_ACUITY_LIGHTING_FLAT_SHADING
 cylinder.texture = rc.Texture.from_image(img_filename=cfg.VR_ACUITY_CYLINDER_TEXTURE)
 cylinder.speed = 5.
 vr_scene = rc.Scene(meshes=[cylinder], name="Cylinder Scene")
-cylinder.arrays[2][:] *= 2
+cylinder.arrays[2][:] *= 3
 
 
 
@@ -64,29 +64,35 @@ app.current_vr_scene = vr_scene
 vr_scene.bgColor = (1., 1., 1.)
 
 
-circle = object_reader.get_mesh('Circle', scale=.21)
-circle.parent = app.arena
-circle.position.xyz = 0., 0, -0.01
-circle.uniforms['diffuse'] = .5, .5, .5
-circle.uniforms['flat_shading'] = True
-circle.rotation.x = 90
-app.active_scene.meshes.append(circle)
+for y, name, color in zip([0.05, -.15, -.25], ['Monkey', 'Torus', 'Sphere'], [(1., .5, 0.), (.5, 1., 0.), (.4, .4, 1.)]):
+    circle = object_reader.get_mesh(name, scale=.06)
+    circle.uniforms['diffuse'] = color
+    circle.parent = app.arena
+    circle.position.xyz = 0., y, -0.01
+    # circle.uniforms['diffuse'] = .5, .5, .5
+    circle.uniforms['flat_shading'] = False
+    def update_circle(dt, mesh):
+        mesh.rotation.y -= 34. * dt
+    pyglet.clock.schedule(update_circle, circle)
+    vr_scene.meshes.append(circle)
 
 cylinder_speed = 4.
 
 
 
 # Build experiment event sequence
-seq = [events.update_attribute(cylinder, 'visible', False),
-       events.wait_duration(20.)]
+seq = [
+    # events.update_attribute(cylinder, 'visible', False),
+       # events.wait_duration(20.)
+       ]
 for speed in random.permutation(cfg.VR_ACUITY_CYLINDER_SPEEDS * 2):
-    for direction in [1, -1]:
+    for direction in [1, 1]:
         phase_seq = [
             events.update_attribute(cylinder, 'visible', True),
-            events.update_attribute(cylinder, 'speed', speed * direction),
-            events.wait_duration(cfg.VR_ACUITY_PHASE_DURATION_SECS),
-            events.update_attribute(cylinder, 'visible', False),
-            events.wait_duration(cfg.VR_ACUITY_ISI_DURATION_SECS),
+            events.update_attribute(cylinder, 'speed', 5 * direction),
+            events.wait_duration(20000),#cfg.VR_ACUITY_PHASE_DURATION_SECS),
+            # events.update_attribute(cylinder, 'visible', False),
+            # events.wait_duration(cfg.VR_ACUITY_ISI_DURATION_SECS),
         ]
         seq.extend(phase_seq)
 seq.append(events.close_app(app=app))

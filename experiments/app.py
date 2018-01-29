@@ -1,13 +1,36 @@
 from __future__ import print_function
 
+#
+# {'stereo': 0,
+#  'buffer_size': 32,
+#  'aux_buffers': 4,
+#  'sample_buffers': 0,
+#  'samples': 0,
+#  'red_size': 8,
+#  'green_size': 8,
+#  'blue_size': 8,
+#  'alpha_size': 0,
+#  'depth_size': 24,
+#  'stencil_size': 0,
+#  'accum_red_size': 16,
+#  'accum_blue_size': 16,
+#  'accum_green_size': 16,
+#  'accum_alpha_size': 16,
+#  'major_version': None,
+#  'minor_version': None,
+#  'forward_compatible': None,
+#  'debug': None,
+#  }
+
 import pyglet
+import pyglet.gl as gl
+import numpy as np
 pyglet.options['debug_gl'] = False
 pyglet.options['debug_gl_trace'] = False
 
 import ratcave as rc
 from natnetclient import NatClient
 import utils
-
 
 motive = NatClient(read_rate=2000, )
 if not motive.rigid_bodies:
@@ -18,8 +41,8 @@ if not motive.rigid_bodies['Arena'].position:
 
 
 class RatcaveApp(pyglet.window.Window):
-
-    def __init__(self, arena_objfile, projector_file, fullscreen=True, screen=1, antialiasing=True, vsync=False, fps_mode=False, *args, **kwargs):
+    def __init__(self, arena_objfile, projector_file, fullscreen=True, screen=1, antialiasing=True, vsync=False,
+                 fps_mode=False, *args, **kwargs):
         """
         A Pyglet Window that sets up the arena, beamer, and virtual scenes, along with motive update and draw functions
         for updating and rendering a virtual reality environment in a ratCAVE setup.
@@ -30,9 +53,9 @@ class RatcaveApp(pyglet.window.Window):
 
         self.cube_fbo = utils.setup_cube_fbo()
 
-        self.active_scene, self.arena,  self.arena_rb = utils.load_projected_scene(arena_file=arena_objfile,
-                                                    projector_file=projector_file,
-                                                    motive_client=motive)
+        self.active_scene, self.arena, self.arena_rb = utils.load_projected_scene(arena_file=arena_objfile,
+                                                                                  projector_file=projector_file,
+                                                                                  motive_client=motive)
 
         self.orig_texture = None
 
@@ -54,28 +77,70 @@ class RatcaveApp(pyglet.window.Window):
 
         pyglet.clock.schedule(self.update)
 
-    def on_draw(self):
-        """Render the virtual environment."""
-        if self.fps_mode:
-            with self.shader:
-                if self.current_vr_scene:
-                    self.current_vr_scene.draw()
-                else:
-                    self.active_scene.draw()
-        else:
-            with self.shader:
-                if self.current_vr_scene:
-                    with self.cube_fbo as fbo:
-                        self.current_vr_scene.draw360_to_texture(fbo.texture)
-                if self.antialiasing:
-                    with self.fbo_aa:
-                        self.active_scene.draw()
-                else:
-                    self.active_scene.draw()
+    # def on_draw(self):
+    #     """Render the virtual environment."""
+    #     if self.fps_mode:
+    #         with self.shader:
+    #             if self.current_vr_scene:
+    #                 self.current_vr_scene.draw()
+    #             else:
+    #                 self.active_scene.draw()
+    #     else:
+    #         with self.shader:
+    #             if self.current_vr_scene:
+    #                 with self.cube_fbo as fbo:
+    #
+    #                     self.current_vr_scene.draw360_to_texture_anaglyphed(fbo.texture)
+    #             if self.antialiasing:
+    #                 with self.fbo_aa:
+    #                     self.active_scene.draw()
+    #             else:
+    #                 self.active_scene.draw()
+    #
+    #         if self.antialiasing:
+    #             with self.shader_deferred:
+    #                 self.aa_quad.draw()
 
-            if self.antialiasing:
-                with self.shader_deferred:
-                    self.aa_quad.draw()
+
+    # def on_draw(self):
+    #     """new anaglyph drawing function."""
+    #     if self.current_vr_scene:
+    #         # One eye
+    #         with self.shader:
+    #             gl.glColorMask(True, False, False, True)
+    #             cam = self.current_vr_scene.camera
+    #             orig_cam_position = cam.position.xyz
+    #             # import ipdb
+    #             # ipdb.set_trace()
+    #             cam.position.xyz = cam.model_matrix.dot([.02 / 2., 0., 0., 1.])[:3]  # inter_eye_distance / 2.
+    #
+    #             cam.uniforms['playerPos'] = cam.position.xyz
+    #             if self.current_vr_scene:
+    #                 with self.cube_fbo as fbo:
+    #                     self.current_vr_scene.draw360_to_texture(fbo.texture)
+    #             self.active_scene.draw()
+    #
+    #             cam.position.xyz = orig_cam_position
+    #
+    #         # Other eye
+    #         with self.shader:
+    #             gl.glColorMask(False, True, True, True)
+    #             cam.position.xyz = cam.model_matrix.dot([-.02 / 2., 0., 0., 1.])[:3]
+    #             cam.uniforms['playerPos'] = cam.position.xyz
+    #             if self.current_vr_scene:
+    #                 with self.cube_fbo as fbo:
+    #                     self.current_vr_scene.draw360_to_texture(fbo.texture)
+    #             self.active_scene.draw()
+    #
+    #             cam.position.xyz = orig_cam_position
+
+    def on_draw(self):
+
+        if self.current_vr_scene:
+            with self.shader:
+                rc.experimental.draw_vr_anaglyph(self.cube_fbo, self.current_vr_scene, self.active_scene, eye_poses=(.035, -.035))
+                # rc.experimental.draw_vr_polarized(self.cube_fbo, self.current_vr_scene, self.active_scene, eye_poses=(.035, -.035))
+
 
     def update(self, dt):
         """Update arena position and vr_scene's camera to match motive's Arena and Rat rigid bodies."""
@@ -86,6 +151,7 @@ class RatcaveApp(pyglet.window.Window):
             if sum(self.rat_rb.position) != 0:
                 self.current_vr_scene.camera.position.xyz = self.rat_rb.position
                 self.current_vr_scene.camera.rotation.xyzw = self.rat_rb.quaternion
+                self.current_vr_scene.camera.update()
                 self.current_vr_scene.camera.uniforms['playerPos'] = self.current_vr_scene.camera.position.xyz
 
     @property
@@ -94,9 +160,11 @@ class RatcaveApp(pyglet.window.Window):
 
     @vr_scenes.setter
     def vr_scenes(self, value):
-        raise AttributeError("RatcaveApp.vr_scenes can not be directly assigned.  Instead, use the RatcaveApp.add_vr_scene() method.")
+        raise AttributeError(
+            "RatcaveApp.vr_scenes can not be directly assigned.  Instead, use the RatcaveApp.add_vr_scene() method.")
 
-    def register_vr_scene(self, scene, parent_to_arena=True, match_light_to_beamer=True, make_cube_camera=True, face_culling=False):
+    def register_vr_scene(self, scene, parent_to_arena=True, match_light_to_beamer=True, make_cube_camera=True,
+                          face_culling=False):
         """appends a virtual scene to the app, making any changes to the arena needed to display it correctly.
         Will also make it the current vr_scene automatically.
         """

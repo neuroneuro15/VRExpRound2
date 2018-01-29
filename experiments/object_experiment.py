@@ -67,8 +67,8 @@ vr_object.position.y += cfg.VR_OBJECT_Y_OFFSET
 vr_object.uniforms['diffuse'] = cfg.VR_OBJECT_LIGHTING_DIFFUSE
 vr_object.uniforms['specular'] = cfg.VR_OBJECT_LIGHTING_SPECULAR
 vr_object.uniforms['spec_weight'] = cfg.VR_OBJECT_LIGHTING_SPEC_WEIGHT
-vr_object.uniforms['ambient'] = cfg.VR_OBJECT_LIGHTING_AMBIENT
-vr_object.uniforms['flat_shading'] = cfg.VR_OBJECT_LIGHTING_FLAT_SHADING
+vr_object.uniforms['ambient'] = (0.2, 0.2, 0.2) #cfg.VR_OBJECT_LIGHTING_AMBIENT
+vr_object.uniforms['flat_shading'] = False #cfg.VR_OBJECT_LIGHTING_FLAT_SHADING
 if 'real' in cfg.VR_OBJECT_TYPE.lower():
     vr_object.visible = False
 
@@ -134,12 +134,12 @@ else:
     cfg.VR_OBJECT_PHASE_4_DURATION_SECS = 1.
 
 exp_seq = [
-    events.wait_duration(cfg.VR_OBJECT_PHASE_1_DURATION_SECS),
-    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
-    events.set_scene_to(app, vr_scene_without_object),
-    events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
-    events.wait_duration(cfg.VR_OBJECT_PHASE_2_DURATION_SECS),
-    events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
+    # events.wait_duration(cfg.VR_OBJECT_PHASE_1_DURATION_SECS),
+    # events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
+    # events.set_scene_to(app, vr_scene_without_object),
+    # events.fade_to_white(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
+    # events.wait_duration(cfg.VR_OBJECT_PHASE_2_DURATION_SECS),
+    # events.fade_to_black(meshes=meshes_to_fade, speed=cfg.VR_OBJECT_FADE_SPEED),
     # events.send_robo_command(robo_arm, cfg.VR_OBJECT_ROBO_COMMAND_UP),
     # events.wait_duration(cfg.VR_OBJECT_ROBO_ARM_WAIT_DURATION_SECS),
     events.set_scene_to(app, vr_scene_with_object),
